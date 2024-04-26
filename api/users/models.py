@@ -19,6 +19,11 @@ class Pelicula(models.Model):
     titulo = models.CharField(max_length=255)
     fecha_estreno = models.DateField()
     genero = models.CharField(max_length=50)
+    duracion = models.IntegerField()
+    pais = models.CharField(max_length=50)
+    director = models.CharField(max_length=255)
+    sinopsis = models.TextField()
+    poster = models.URLField()
     # otros campos relevantes para una película
 
 class Review(models.Model):
