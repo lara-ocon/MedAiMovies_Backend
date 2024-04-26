@@ -48,3 +48,17 @@ class LoginSerializer(serializers.Serializer):
             return user
         else:
             raise exceptions.AuthenticationFailed('Invalid credentials')
+
+
+class PeliculaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Pelicula
+        fields = ['titulo',
+                  'fecha_estreno',
+                  'genero',
+                  'duracion',
+                  'pais',
+                  'director',
+                  'sinopsis',
+                  'poster']
+        

@@ -13,5 +13,7 @@ urlpatterns = [
     path('api/users/login/', views.LoginView.as_view(), name='login'),
     path('api/users/me/', views.UsuarioView.as_view(), name='usuario-me'),
     path('api/users/logout/', views.LogoutView.as_view(), name='logout'),
+    path('api/peliculas/', views.PeliculaCreateView.as_view(), name='pelicula-list-create'),
+    path('api/peliculas/<int:pk>/', views.PeliculaDetailView.as_view(), name='pelicula-detail'),
     
 ]

@@ -9,7 +9,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
 from django.contrib.auth import authenticate
-
+from .serializers import PeliculaSerializer
+from .models import Pelicula
 
 
 
@@ -100,6 +101,20 @@ class LogoutView(generics.DestroyAPIView):
         except Token.DoesNotExist:
             print('no existe token a borrar')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+class PeliculaCreateView(generics.CreateAPIView):
+    """
+    Vista para listar y crear peliculas
+    """
+    queryset = Pelicula.objects.all()
+    serializer_class = PeliculaSerializer
+
+class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Vista para ver, actualizar y eliminar peliculas
+    """
+    queryset = Pelicula.objects.all()
+    serializer_class = PeliculaSerializer
         
 # version Miguel
 """
