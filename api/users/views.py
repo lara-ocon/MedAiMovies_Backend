@@ -38,7 +38,7 @@ class LoginView(generics.CreateAPIView):
 
                 # forma 1
                 # response.set_cookie(key='session', value=token.key, secure=False, httponly=True, samesite='lax') # secure = false para desarrollo
-                response.set_cookie(key='session', value=token.key, samesite='lax') # secure = false para desarrollo
+                response.set_cookie(key='session', value=token.key, samesite='None', secure=True) # secure = false para desarrollo
                 print('response.cookies:', response.cookies)
 
                 # forma 2
