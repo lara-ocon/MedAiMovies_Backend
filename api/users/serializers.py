@@ -53,7 +53,8 @@ class LoginSerializer(serializers.Serializer):
 class PeliculaSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Pelicula
-        fields = ['titulo',
+        fields = ['id',
+                  'titulo',
                   'fecha_estreno',
                   'genero',
                   'duracion',
