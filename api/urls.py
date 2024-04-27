@@ -15,5 +15,5 @@ urlpatterns = [
     path('api/users/logout/', views.LogoutView.as_view(), name='logout'),
     path('api/peliculas/', views.PeliculaCreateView.as_view(), name='pelicula-list-create'),
     path('api/peliculas/<int:pk>/', views.PeliculaDetailView.as_view(), name='pelicula-detail'),
-    
+    path('api/reviews/', views.ReviewListCreateView.as_view(), name='review-list-create'),
 ]

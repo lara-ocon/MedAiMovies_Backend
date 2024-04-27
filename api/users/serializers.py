@@ -63,3 +63,16 @@ class PeliculaSerializer(serializers.ModelSerializer):
                   'sinopsis',
                   'poster']
         
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Review
+        fields = ['id', 'usuario', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
+        read_only_fields = ['usuario', 'fecha_creacion']  # El usuario y la fecha de creación no se deben modificar manualmente
+
+    def create(self, validated_data):
+        # Asigna automáticamente el usuario autenticado a la reseña
+        validated_data['usuario'] = self.context['request'].user
+        return models.Review.objects.create(**validated_data)
+
+        
