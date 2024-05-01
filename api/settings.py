@@ -69,8 +69,15 @@ CORS_ALLOWED_ORIGINS = [
 'http://localhost:5173',  # Solo permite peticiones de este origen
 ]
 """
+
+"""Esta funciona
 CORS_ALLOW_ALL_ORIGINS = True  # Cambia esto a False
 CORS_ALLOW_CREDENTIALS = True 
+"""
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+]
 
 ROOT_URLCONF = 'api.urls'
 

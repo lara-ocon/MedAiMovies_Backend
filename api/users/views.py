@@ -64,7 +64,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         # Obtiene el token del usuario desde la cookie en la solicitud
         token_key = self.request.COOKIES.get('session')
         print('token_key:', token_key)
-        print('cookies:', self.request.COOKIES)
+        print('cookies en usuario view:', self.request.COOKIES)
         if not token_key:
             print('raise NotFound')
             raise NotFound('Session does not exist')
@@ -127,13 +127,15 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     """
 
     # forma 2:
+    
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Permite que los usuarios no autenticados puedan ver las reseñas
-
+    print('hoola')
     def get_queryset(self):
         """
         Este método sobrescrito permite filtrar las reseñas por la película.
         """
+        print('cookies en review backend:', self.request.COOKIES)
         pelicula_id = self.request.query_params.get('pelicula')
         if pelicula_id is not None:
             return Review.objects.filter(pelicula=pelicula_id)

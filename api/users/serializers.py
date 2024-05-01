@@ -60,8 +60,9 @@ class PeliculaSerializer(serializers.ModelSerializer):
                   'duracion',
                   'pais',
                   'director',
-                  'sinopsis',
-                  'poster']
+                  'sinopsis', 
+                    'poster'
+        ]
         
 
 class ReviewSerializer(serializers.ModelSerializer):
