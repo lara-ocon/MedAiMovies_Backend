@@ -96,7 +96,10 @@ class LogoutView(generics.DestroyAPIView):
             token = Token.objects.get(key=token_key)
             token.delete()
             response = Response(status=status.HTTP_204_NO_CONTENT)
-            response.delete_cookie('session')
+            print('cookie de session antes de borrar:', response.cookies)
+            # response.delete_cookie('session')
+            response.delete_cookie('session', path='/', domain='127.0.0.1', samesite='None')
+            print('se ha borrado la cookie de session')
             return response
         except Token.DoesNotExist:
             print('no existe token a borrar')
