@@ -16,4 +16,5 @@ urlpatterns = [
     path('api/peliculas/', views.PeliculaCreateView.as_view(), name='pelicula-list-create'),
     path('api/peliculas/<int:pk>/', views.PeliculaDetailView.as_view(), name='pelicula-detail'),
     path('api/reviews/', views.ReviewListCreateView.as_view(), name='review-list-create'),
+    path('api/peliculas/search/', views.PeliculaSearchView.as_view(), name='pelicula-search'),
 ]

@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.db.utils import IntegrityError
+from django.db.models import Q
 from django.core.exceptions import ObjectDoesNotExist
 from api.users import serializers
 from drf_spectacular.utils import extend_schema, OpenApiResponse
@@ -118,6 +119,19 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
+
+
+# Para permitir las búsquedas por título y director
+class PeliculaSearchView(generics.ListAPIView):
+    serializer_class = PeliculaSerializer
+
+    def get_queryset(self):
+        query = self.request.query_params.get('q')
+        print('queery es:', query)
+        if query:
+            return Pelicula.objects.filter(Q(titulo__icontains=query) | Q(director__icontains=query))
+        print('no entramos a query asi q devolvemos todas las pelis')
+        return Pelicula.objects.all()
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     # forma 1:
