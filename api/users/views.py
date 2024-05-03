@@ -15,7 +15,6 @@ from .models import Pelicula, Review
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 
 
-
 class RegistroView(generics.CreateAPIView):
     # TODO 13 y 15
     serializer_class = serializers.UsuarioSerializer
@@ -40,21 +39,20 @@ class LoginView(generics.CreateAPIView):
 
                 # forma 1
                 # response.set_cookie(key='session', value=token.key, secure=False, httponly=True, samesite='lax') # secure = false para desarrollo
-                response.set_cookie(key='session', value=token.key, samesite='None', secure=True) # secure = false para desarrollo
+                response.set_cookie(key='session', value=token.key, samesite='None', httponly=True, secure=True) # secure = false para desarrollo
                 # response.set_cookie(key='session', value=token.key, samesite='lax')
                 print('response.cookies:', response.cookies)
 
                 # forma 2
                 """
                 if not created: # ESTO ANTES ERA IF NOT CREATED
-                    response.set_cookie(key='session', value=token.key, secure=True, httponly=True, samesite='lax')
+                    response.set_cookie(key='session', value=token.key, secure=True,  samesite='lax')
                     print('response.cookies:', response.cookies)
                 """
                 return response
             else:
                 print('serializer.errors:', serializer.errors)
                 return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
-
 
 
 class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
@@ -77,7 +75,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         except Token.DoesNotExist:
             print('raise NotFound 2')
             raise NotFound('Session does not exist')
-
 
 
 # TODO 26
@@ -106,12 +103,14 @@ class LogoutView(generics.DestroyAPIView):
             print('no existe token a borrar')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
+
 class PeliculaCreateView(generics.CreateAPIView):
     """
     Vista para listar y crear peliculas
     """
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
+
 
 class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
@@ -133,6 +132,7 @@ class PeliculaSearchView(generics.ListAPIView):
         print('no entramos a query asi q devolvemos todas las pelis')
         return Pelicula.objects.all()
 
+
 class ReviewListCreateView(generics.ListCreateAPIView):
     # forma 1:
     """
@@ -153,8 +153,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
         Este método sobrescrito permite filtrar las reseñas por la película.
         """
         print('cookies en review backend:', self.request.COOKIES)
+        print('cookies')
         pelicula_id = self.request.query_params.get('pelicula')
         if pelicula_id is not None:
             return Review.objects.filter(pelicula=pelicula_id)
         return Review.objects.none()  # Retorna vacío si no hay un parámetro 'pelicula'
-
