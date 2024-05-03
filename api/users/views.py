@@ -35,7 +35,7 @@ class LoginView(generics.CreateAPIView):
                 token, created = Token.objects.get_or_create(user=serializer.validated_data)
                 print('login token:', token.key)
                 print('login created:', created)
-                response = Response({'status': 'success'})
+                response = Response({'status': 'success', 'token': token.key})
 
                 # forma 1
                 # response.set_cookie(key='session', value=token.key, secure=False, httponly=True, samesite='lax') # secure = false para desarrollo
@@ -49,6 +49,7 @@ class LoginView(generics.CreateAPIView):
                     response.set_cookie(key='session', value=token.key, secure=True,  samesite='lax')
                     print('response.cookies:', response.cookies)
                 """
+                print('response:', response)
                 return response
             else:
                 print('serializer.errors:', serializer.errors)
@@ -153,7 +154,7 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     """
 
     # forma 2:
-    
+    '''
     serializer_class = ReviewSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]  # Permite que los usuarios no autenticados puedan ver las reseñas
     print('hoola')
@@ -167,3 +168,37 @@ class ReviewListCreateView(generics.ListCreateAPIView):
         if pelicula_id is not None:
             return Review.objects.filter(pelicula=pelicula_id)
         return Review.objects.none()  # Retorna vacío si no hay un parámetro 'pelicula'
+    '''
+
+    # forma 3:
+    # check headers of request
+    """
+    def get_queryset(self):
+        print('cookies en review backend:', self.request.COOKIES)
+        print('headers en review backend:', self.request.headers)
+        print('headers en review backend:', self.request.headers.get('Authorization'))
+        print('headers en review backend:', self.request.headers.get('Cookie'))
+        print('headers en review backend:', self.request.headers.get('cookie'))
+        pelicula_id = self.request.query_params.get('pelicula')
+        if pelicula_id is not None:
+            return Review.objects.filter(pelicula=pelicula_id)
+        return Review.objects.all()
+    """
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        try:
+            token = Token.objects.get(key=self.request.COOKIES.get('session'))
+            print('token:', token)
+            serializer.save(usuario=token.user)
+        except Token.DoesNotExist:
+            print('raise ValidationError')
+            raise ValidationError('No se ha iniciado sesión')
+
+    def get_queryset(self):
+        print('cookies en review backend:', self.request.headers)
+        pelicula_id = self.request.query_params.get('pelicula')
+        if pelicula_id is not None:
+            return Review.objects.filter(pelicula=pelicula_id)
+        return Review.objects.all()
