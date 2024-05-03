@@ -13,8 +13,6 @@ from django.contrib.auth import authenticate
 from .serializers import PeliculaSerializer, ReviewSerializer
 from .models import Pelicula, Review
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.exceptions import PermissionDenied
 
 
 class RegistroView(generics.CreateAPIView):
@@ -145,19 +143,27 @@ class PeliculaSearchView(generics.ListAPIView):
 
 
 class ReviewListCreateView(generics.ListCreateAPIView):
+    # forma 1:
+    """
+    queryset = Review.objects.all()
     serializer_class = ReviewSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    authentication_classes = [TokenAuthentication]
-    # print("ReviewListCreateView")
-
-    def get_queryset(self):
-        pelicula_id = self.request.query_params.get('pelicula')
-        return Review.objects.filter(pelicula=pelicula_id) if pelicula_id else Review.objects.none()
 
     def perform_create(self, serializer):
-        user = self.request.user
-        print("Usuario autenticado:", user)  # Depuración: imprime el usuario autenticado
-        if not user.is_authenticated:
-            raise PermissionDenied("Usuario no autenticado.")
+        serializer.save(usuario=self.request.user)
+    """
 
-        serializer.save(usuario=user)
+    # forma 2:
+    
+    serializer_class = ReviewSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Permite que los usuarios no autenticados puedan ver las reseñas
+    print('hoola')
+    def get_queryset(self):
+        """
+        Este método sobrescrito permite filtrar las reseñas por la película.
+        """
+        print('cookies en review backend:', self.request.COOKIES)
+        print('cookies')
+        pelicula_id = self.request.query_params.get('pelicula')
+        if pelicula_id is not None:
+            return Review.objects.filter(pelicula=pelicula_id)
+        return Review.objects.none()  # Retorna vacío si no hay un parámetro 'pelicula'
