@@ -126,10 +126,19 @@ class PeliculaSearchView(generics.ListAPIView):
 
     def get_queryset(self):
         query = self.request.query_params.get('q')
-        print('queery es:', query)
+        tipo = self.request.query_params.get('t')
         if query:
-            return Pelicula.objects.filter(Q(titulo__icontains=query) | Q(director__icontains=query))
-        print('no entramos a query asi q devolvemos todas las pelis')
+            if tipo == "titulo":
+                return Pelicula.objects.filter(Q(titulo__icontains=query))
+            elif tipo == "director":
+                return Pelicula.objects.filter(Q(director__icontains=query))
+            elif tipo == "genero":
+                return Pelicula.objects.filter(Q(genero__icontains=query))
+            elif tipo == "sinopsis":
+                return Pelicula.objects.filter(Q(sinopsis__icontains=query))
+            elif tipo == "nota":
+                # return Pelicula.objects.filter(Q(nota__icontains=query))
+                print("Falta añadir la nota al modelo")
         return Pelicula.objects.all()
 
 
