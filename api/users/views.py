@@ -149,8 +149,8 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-    def perform_create(self, serializer):
-        serializer.save(usuario=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(usuario=self.request.user)
 
     # forma 2:
     '''

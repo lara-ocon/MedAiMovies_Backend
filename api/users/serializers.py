@@ -8,7 +8,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         # TODO: 5 y 22
         model = models.Usuario
-        fields = ['nombre', 'tel', 'email', 'password']
+        fields = ['id', 'nombre', 'tel', 'email', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -69,11 +69,11 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
         fields = ['id', 'usuario', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
-        read_only_fields = ['usuario', 'fecha_creacion']  # El usuario y la fecha de creación no se deben modificar manualmente
+        read_only_fields = ['fecha_creacion']  # El usuario y la fecha de creación no se deben modificar manualmente
 
     def create(self, validated_data):
         # Asigna automáticamente el usuario autenticado a la reseña
-        validated_data['usuario'] = self.context['request'].user
-        return models.Review.objects.create(**validated_data)
+        print('context:', self.context['request'].POST["usuario"])
+        return models.Review.objects.create(usuario=self.context['request'].POST['usuario'], **validated_data)
 
         
