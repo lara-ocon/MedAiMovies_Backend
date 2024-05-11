@@ -151,3 +151,11 @@ class ReviewListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save()
+
+    def get_queryset(self):
+        queryset = Review.objects.all()
+        pelicula_id = self.request.query_params.get('pelicula', None)
+        print('pelicula_id:', pelicula_id)
+        if pelicula_id is not None:
+            queryset = queryset.filter(pelicula__id=pelicula_id)
+        return queryset
