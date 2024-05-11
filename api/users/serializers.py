@@ -65,6 +65,7 @@ class PeliculaSerializer(serializers.ModelSerializer):
         ]
         
 
+"""
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Review
@@ -75,5 +76,28 @@ class ReviewSerializer(serializers.ModelSerializer):
         # Asigna automáticamente el usuario autenticado a la reseña
         print('context:', self.context['request'].POST["usuario"])
         return models.Review.objects.create(usuario=self.context['request'].POST['usuario'], **validated_data)
+"""
 
-        
+class ReviewSerializer(serializers.ModelSerializer):
+    # usuario_id = serializers.IntegerField(write_only=True) para que tambien se vea, se bueno tenerlo puesto por privacidad
+    usuario_id = serializers.IntegerField(write_only=False)
+    
+    class Meta:
+        model = models.Review
+        fields = ['id', 'usuario_id', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
+        read_only_fields = ['fecha_creacion']
+
+    def validate_usuario_id(self, value):
+        try:
+            # Verifica que el usuario exista en la base de datos.
+            models.Usuario.objects.get(pk=value)
+            return value
+        except models.Usuario.DoesNotExist:
+            raise serializers.ValidationError("Usuario no encontrado con este ID")
+
+    def create(self, validated_data):
+        # Asigna el usuario usando el ID proporcionado en el JSON de la solicitud.
+        usuario_id = validated_data.pop('usuario_id')
+        usuario = models.Usuario.objects.get(pk=usuario_id)
+        validated_data['usuario'] = usuario
+        return models.Review.objects.create(**validated_data)

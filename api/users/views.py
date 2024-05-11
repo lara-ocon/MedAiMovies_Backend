@@ -146,8 +146,8 @@ class PeliculaSearchView(generics.ListAPIView):
 
 class ReviewListCreateView(generics.ListCreateAPIView):
     # forma 1:
-    queryset = Review.objects.all()
-    serializer_class = ReviewSerializer
+    # queryset = Review.objects.all()
+    # serializer_class = ReviewSerializer
 
     # def perform_create(self, serializer):
     #     serializer.save(usuario=self.request.user)
@@ -201,3 +201,10 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     #     if pelicula_id is not None:
     #         return Review.objects.filter(pelicula=pelicula_id)
     #     return Review.objects.all()
+    
+    # forma 3:
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
