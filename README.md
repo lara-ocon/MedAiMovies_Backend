@@ -8,3 +8,7 @@
 4. try python manage.py runserver 
 5. If does not work, delete db.sqlite3 and python manage.py migrate
 6. python manage.py runserver
+
+
+# cargar los datos
+python manage.py loaddata peliculas.json

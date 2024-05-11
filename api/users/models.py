@@ -30,6 +30,7 @@ class Review(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reseñas')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
     # usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='reseñas') asi da otro error (solo se puede hacer una review por  usuario)
+    usuario_email = models.EmailField()  # Agregado para almacenar el email del usuario
     calificacion = models.IntegerField()
     comentario = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)

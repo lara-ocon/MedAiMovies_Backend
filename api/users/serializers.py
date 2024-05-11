@@ -64,15 +64,16 @@ class PeliculaSerializer(serializers.ModelSerializer):
                     'poster'
         ]
         
-        
+
 class ReviewSerializer(serializers.ModelSerializer):
     # usuario_id = serializers.IntegerField(write_only=True) para que tambien se vea, se bueno tenerlo puesto por privacidad
     usuario_id = serializers.IntegerField(write_only=False)
-    
+    usuario_email = serializers.EmailField(read_only=True) # para q no se pueda escribir pero si leer
+
     class Meta:
         model = models.Review
-        fields = ['id', 'usuario_id', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
-        read_only_fields = ['fecha_creacion']
+        fields = ['id', 'usuario_id', 'usuario_email', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
+        read_only_fields = ['fecha_creacion', 'usuario_email']
 
     def validate_usuario_id(self, value):
         try:
@@ -87,4 +88,5 @@ class ReviewSerializer(serializers.ModelSerializer):
         usuario_id = validated_data.pop('usuario_id')
         usuario = models.Usuario.objects.get(pk=usuario_id)
         validated_data['usuario'] = usuario
+        validated_data['usuario_email'] = usuario.email
         return models.Review.objects.create(**validated_data)
