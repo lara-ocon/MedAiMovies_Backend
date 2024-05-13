@@ -57,7 +57,7 @@ class LoginView(generics.CreateAPIView):
 
 
 class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
-    # TODO 18 y 20
+
     serializer_class = serializers.UsuarioSerializer
 
     def get_object(self):
@@ -76,9 +76,22 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         except Token.DoesNotExist:
             print('raise NotFound 2')
             raise NotFound('Session does not exist')
+        
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs) # metodo original de la clase
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            token_key = request.COOKIES.get('session')
+            if token_key:
+                try:
+                    token = Token.objects.get(key=token_key)
+                    token.delete()
+                except Token.DoesNotExist:
+                    pass
+            response.delete_cookie('session', path='/', domain='127.0.0.1', samesite='None')
+        return response
 
 
-# TODO 26
+
 @extend_schema(
     description='Logout endpoint',
     responses={
@@ -87,7 +100,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
     }
 )
 class LogoutView(generics.DestroyAPIView):
-    # TODO 19
+
     def delete(self, request, *args, **kwargs):
         try:
             token_key = request.COOKIES.get('session')
@@ -120,6 +133,7 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     """
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
 
 # Para permitir las búsquedas por título y director
@@ -149,9 +163,11 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
+    # when POST request is made
     def perform_create(self, serializer):
         serializer.save()
 
+    # when GET request is made
     def get_queryset(self):
         queryset = Review.objects.all()
         pelicula_id = self.request.query_params.get('pelicula', None)

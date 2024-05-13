@@ -10,26 +10,32 @@ class UsuarioSerializer(serializers.ModelSerializer):
         model = models.Usuario
         fields = ['id', 'nombre', 'tel', 'email', 'password']
         extra_kwargs = {
-            'password': {'write_only': True}
+            'password': {'write_only': True, 'required': False}
         }
 
 
     def validate_password(self, value):
-        # TODO: 7: completar
+
         valid_password = re.match(r'^(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z]).*$', value)
         if valid_password and len(value) >= 8:
             return value
         else:
             raise exceptions.ValidationError('Invalid password format')
 
-# TODO: 8
     def create(self, validated_data):
         return models.Usuario.objects.create_user(username=validated_data['email'], **validated_data)
 
     def update(self, instance, validated_data):
+        # Actualizamos solo los campos nombre y tel
+        instance.nombre = validated_data.get('nombre', instance.nombre)
+        instance.tel = validated_data.get('tel', instance.tel)
+        instance.save()
+        return instance
+        """Si quisiseramos actualizar la contraseña tambien, descomentar lo siguiente:
         if (validated_data.get('password')):
             instance.set_password(validated_data.pop('password'))
         return super().update(instance, validated_data)
+        """
     
 class LoginSerializer(serializers.Serializer):
     # TODO: 10
