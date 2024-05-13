@@ -43,5 +43,96 @@
             "poster": "https://image.tmdb.org/t/p/original/CD4RJkRcje5NcUZdoQWDY96GjS.jpg",
             "nota": 5
         }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 1,
+        "fields": {
+            "titulo": "Iron Man",
+            "fecha_estreno": "2008-05-02",
+            "genero": "Superhéroes",
+            "duracion": 126,
+            "pais": "Estados Unidos",
+            "director": "Jon Favreau",
+            "sinopsis": "Después de ser secuestrado por un grupo terrorista en Afganistán, el multimillonario y genio inventor Tony Stark construye una armadura mecánica para escapar y decide usar su creación para luchar contra el mal como el superhéroe Iron Man.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/7/70/Ironmanposter.JPG",
+            "nota": 9
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 2,
+        "fields": {
+            "titulo": "Los Vengadores",
+            "fecha_estreno": "2012-05-04",
+            "genero": "Superhéroes",
+            "duracion": 143,
+            "pais": "Estados Unidos",
+            "director": "Joss Whedon",
+            "sinopsis": "Cuando un enemigo inesperado amenaza la seguridad global, Nick Fury, director de la agencia S.H.I.E.L.D., reúne a un grupo de superhéroes para salvar al mundo del desastre.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/f/f9/TheAvengers2012Poster.jpg",
+            "nota": 8
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 3,
+        "fields": {
+            "titulo": "Spiderman",
+            "fecha_estreno": "2002-05-03",
+            "genero": "Superhéroes",
+            "duracion": 121,
+            "pais": "Estados Unidos",
+            "director": "Sam Raimi",
+            "sinopsis": "Peter Parker, un estudiante de secundaria, adquiere habilidades sobrehumanas después de ser mordido por una araña genéticamente modificada y decide usar sus poderes para combatir el crimen como Spider-Man.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/f/f3/Spider-Man2002Poster.jpg",
+            "nota": 7
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 4,
+        "fields": {
+            "titulo": "Star Wars",
+            "fecha_estreno": "1977-05-25",
+            "genero": "Ciencia ficción",
+            "duracion": 121,
+            "pais": "Estados Unidos",
+            "director": "George Lucas",
+            "sinopsis": "Luke Skywalker une fuerzas con un caballero Jedi, un piloto arrogante, un wookiee y dos droides para salvar la galaxia del malvado Imperio y rescatar a la princesa Leia.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/8/87/StarWarsMoviePoster1977.jpg",
+            "nota": 10
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 5,
+        "fields": {
+            "titulo": "El hobbit",
+            "fecha_estreno": "2012-12-14",
+            "genero": "Fantasía",
+            "duracion": 169,
+            "pais": "Estados Unidos",
+            "director": "Peter Jackson",
+            "sinopsis": "Bilbo Bolsón, un hobbit pacífico, es arrastrado a una aventura épica para recuperar el Reino Enano de Erebor del temible dragón Smaug.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/0/0c/The_Hobbit-_An_Unexpected_Journey.jpeg",
+            "nota": 8
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 6,
+        "fields": {
+            "titulo": "ET el extraterrestre",
+            "fecha_estreno": "1982-06-11",
+            "genero": "Ciencia ficción",
+            "duracion": 115,
+            "pais": "Estados Unidos",
+            "director": "Steven Spielberg",
+            "sinopsis": "Un niño llamado Elliott encuentra y hace amistad con un extraterrestre varado en la Tierra, a quien él y sus hermanos llaman E.T., y lo ayudan a regresar a su hogar mientras lo mantienen a salvo de las autoridades.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/6/66/E_t_the_extra_terrestrial_ver3.jpg",
+            "nota": 9
+        }
     }
 ]
+
