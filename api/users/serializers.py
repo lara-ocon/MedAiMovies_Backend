@@ -61,7 +61,8 @@ class PeliculaSerializer(serializers.ModelSerializer):
                   'pais',
                   'director',
                   'sinopsis', 
-                    'poster'
+                  'poster',
+                  'nota'
         ]
         
 
@@ -89,4 +90,15 @@ class ReviewSerializer(serializers.ModelSerializer):
         usuario = models.Usuario.objects.get(pk=usuario_id)
         validated_data['usuario'] = usuario
         validated_data['usuario_email'] = usuario.email
+
+        # Actualizamos la nota de la película
+        pelicula = validated_data['pelicula']
+        reviews = models.Review.objects.filter(pelicula=pelicula)
+        nota = 0
+        for review in reviews:
+            nota += review.calificacion
+        nota += validated_data['calificacion']
+        pelicula.nota = nota / (len(reviews) + 1)
+        pelicula.save()
+
         return models.Review.objects.create(**validated_data)

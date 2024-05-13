@@ -12,3 +12,6 @@
 
 # cargar los datos
 python manage.py loaddata peliculas.json
+
+# crear admin
+python manage.py createsuperuser --username admin --email admin@email.com

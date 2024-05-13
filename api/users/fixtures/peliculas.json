@@ -10,7 +10,8 @@
             "pais": "Estados Unidos",
             "director": "Donald Petrie",
             "sinopsis": "Una periodista de una revista de moda se propone escribir un artículo sobre todas las cosas que hacen que las mujeres pierdan a los hombres después de que su editor le diga que debe escribir un artículo sobre cómo perder a un hombre en 10 días.",
-            "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/HowToLoseAGuyimp.jpg"
+            "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/HowToLoseAGuyimp.jpg",
+            "nota": 5
         }
     },
     {
@@ -24,7 +25,8 @@
             "pais": "Estados Unidos",
             "director": "Damien Chazelle",
             "sinopsis": "Un pianista de jazz se enamora de una aspirante a actriz en Los Ángeles.",
-            "poster": "https://m.media-amazon.com/images/I/816O+CBx0ML._AC_SL1500_.jpg"
+            "poster": "https://m.media-amazon.com/images/I/816O+CBx0ML._AC_SL1500_.jpg",
+            "nota": 5
         }
     },
     {
@@ -38,7 +40,8 @@
             "pais": "Estados Unidos",
             "director": "David Frankel",
             "sinopsis": "Una pareja adopta un cachorro de Labrador que se convierte en un perro muy travieso.",
-            "poster": "https://image.tmdb.org/t/p/original/CD4RJkRcje5NcUZdoQWDY96GjS.jpg"
+            "poster": "https://image.tmdb.org/t/p/original/CD4RJkRcje5NcUZdoQWDY96GjS.jpg",
+            "nota": 5
         }
     }
 ]

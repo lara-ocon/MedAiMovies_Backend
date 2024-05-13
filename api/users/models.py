@@ -24,6 +24,7 @@ class Pelicula(models.Model):
     director = models.CharField(max_length=255)
     sinopsis = models.TextField()
     poster = models.URLField()
+    nota = models.FloatField(null=True)
     # otros campos relevantes para una película
 
 class Review(models.Model):
