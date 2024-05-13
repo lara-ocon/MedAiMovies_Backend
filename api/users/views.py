@@ -76,6 +76,20 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         except Token.DoesNotExist:
             print('raise NotFound 2')
             raise NotFound('Session does not exist')
+        
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs) # metodo original de la clase
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            token_key = request.COOKIES.get('session')
+            if token_key:
+                try:
+                    token = Token.objects.get(key=token_key)
+                    token.delete()
+                except Token.DoesNotExist:
+                    pass
+            response.delete_cookie('session', path='/', domain='127.0.0.1', samesite='None')
+        return response
+
 
 
 @extend_schema(
