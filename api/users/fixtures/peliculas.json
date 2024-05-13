@@ -1,0 +1,47 @@
+[
+    {
+        "model": "users.pelicula",
+        "pk": 1,
+        "fields": {
+            "titulo": "How to Lose a Guy in 10 Days",
+            "fecha_estreno": "2003-02-07",
+            "genero": "Comedia romántica",
+            "duracion": 116,
+            "pais": "Estados Unidos",
+            "director": "Donald Petrie",
+            "sinopsis": "Una periodista de una revista de moda se propone escribir un artículo sobre todas las cosas que hacen que las mujeres pierdan a los hombres después de que su editor le diga que debe escribir un artículo sobre cómo perder a un hombre en 10 días.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/HowToLoseAGuyimp.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 2,
+        "fields": {
+            "titulo": "La La Land",
+            "fecha_estreno": "2016-12-09",
+            "genero": "Musical",
+            "duracion": 128,
+            "pais": "Estados Unidos",
+            "director": "Damien Chazelle",
+            "sinopsis": "Un pianista de jazz se enamora de una aspirante a actriz en Los Ángeles.",
+            "poster": "https://m.media-amazon.com/images/I/816O+CBx0ML._AC_SL1500_.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 3,
+        "fields": {
+            "titulo": "Marley & Me",
+            "fecha_estreno": "2008-12-25",
+            "genero": "Comedia dramática",
+            "duracion": 115,
+            "pais": "Estados Unidos",
+            "director": "David Frankel",
+            "sinopsis": "Una pareja adopta un cachorro de Labrador que se convierte en un perro muy travieso.",
+            "poster": "https://image.tmdb.org/t/p/original/CD4RJkRcje5NcUZdoQWDY96GjS.jpg",
+            "nota": 5
+        }
+    }
+]

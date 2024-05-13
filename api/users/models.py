@@ -19,11 +19,19 @@ class Pelicula(models.Model):
     titulo = models.CharField(max_length=255)
     fecha_estreno = models.DateField()
     genero = models.CharField(max_length=50)
+    duracion = models.IntegerField()
+    pais = models.CharField(max_length=50)
+    director = models.CharField(max_length=255)
+    sinopsis = models.TextField()
+    poster = models.URLField()
+    nota = models.FloatField(null=True)
     # otros campos relevantes para una película
 
 class Review(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reseñas')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
+    # usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='reseñas') asi da otro error (solo se puede hacer una review por  usuario)
+    usuario_email = models.EmailField()  # Agregado para almacenar el email del usuario
     calificacion = models.IntegerField()
     comentario = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)

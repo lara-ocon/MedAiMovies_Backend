@@ -8,7 +8,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         # TODO: 5 y 22
         model = models.Usuario
-        fields = ['nombre', 'tel', 'email', 'password']
+        fields = ['id', 'nombre', 'tel', 'email', 'password']
         extra_kwargs = {
             'password': {'write_only': True}
         }
@@ -48,3 +48,57 @@ class LoginSerializer(serializers.Serializer):
             return user
         else:
             raise exceptions.AuthenticationFailed('Invalid credentials')
+
+
+class PeliculaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Pelicula
+        fields = ['id',
+                  'titulo',
+                  'fecha_estreno',
+                  'genero',
+                  'duracion',
+                  'pais',
+                  'director',
+                  'sinopsis', 
+                  'poster',
+                  'nota'
+        ]
+        
+
+class ReviewSerializer(serializers.ModelSerializer):
+    # usuario_id = serializers.IntegerField(write_only=True) para que tambien se vea, se bueno tenerlo puesto por privacidad
+    usuario_id = serializers.IntegerField(write_only=False)
+    usuario_email = serializers.EmailField(read_only=True) # para q no se pueda escribir pero si leer
+
+    class Meta:
+        model = models.Review
+        fields = ['id', 'usuario_id', 'usuario_email', 'pelicula', 'calificacion', 'comentario', 'fecha_creacion']
+        read_only_fields = ['fecha_creacion', 'usuario_email']
+
+    def validate_usuario_id(self, value):
+        try:
+            # Verifica que el usuario exista en la base de datos.
+            models.Usuario.objects.get(pk=value)
+            return value
+        except models.Usuario.DoesNotExist:
+            raise serializers.ValidationError("Usuario no encontrado con este ID")
+
+    def create(self, validated_data):
+        # Asigna el usuario usando el ID proporcionado en el JSON de la solicitud.
+        usuario_id = validated_data.pop('usuario_id')
+        usuario = models.Usuario.objects.get(pk=usuario_id)
+        validated_data['usuario'] = usuario
+        validated_data['usuario_email'] = usuario.email
+
+        # Actualizamos la nota de la película
+        pelicula = validated_data['pelicula']
+        reviews = models.Review.objects.filter(pelicula=pelicula)
+        nota = 0
+        for review in reviews:
+            nota += review.calificacion
+        nota += validated_data['calificacion']
+        pelicula.nota = nota / (len(reviews) + 1)
+        pelicula.save()
+
+        return models.Review.objects.create(**validated_data)
