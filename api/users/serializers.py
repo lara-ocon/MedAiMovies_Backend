@@ -18,7 +18,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
             if re.match(r'^[0-9]{7,9}$', value):
                 return value
             else:
-                raise exceptions.ValidationError('Invalid phone number format')
+                raise exceptions.ValidationError('El formato de número de teléfono no es el adecuado')
 
     def validate_password(self, value):
 
@@ -26,7 +26,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         if valid_password and len(value) >= 8:
             return value
         else:
-            raise exceptions.ValidationError('Invalid password format')
+            raise exceptions.ValidationError('El formato de la contraseña no es el adecuado')
 
     def create(self, validated_data):
         return models.Usuario.objects.create_user(username=validated_data['email'], **validated_data)
@@ -58,7 +58,7 @@ class LoginSerializer(serializers.Serializer):
         if user:
             return user
         else:
-            raise exceptions.AuthenticationFailed('Invalid credentials')
+            raise exceptions.AuthenticationFailed('Credenciales no válidas')
 
 
 class PeliculaSerializer(serializers.ModelSerializer):
