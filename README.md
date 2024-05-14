@@ -107,7 +107,17 @@ The backend supports several endpoints that you can interact with through HTTP r
 
 ## Schema and API Documentation
 
+- **Swagger UI**: `GET /api/schema/swagger-ui/`
+
 - **OpenAPI Schema**: `GET /api/schema/`
+Another option to see the schema is to run the command:
+```
+python manage.py spectacular --file schema.yml
+```
+To obtain in json format:
+```
+python manage.py spectacular --file schema.json --format openapi-json
+```
 - **ReDoc Documentation**: `GET /api/schema/redoc/`
 
 These endpoints provide a schema and human-readable documentation for the API.
