@@ -136,25 +136,31 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
 
-# Para permitir las búsquedas por título y director
 class PeliculaSearchView(generics.ListAPIView):
     serializer_class = PeliculaSerializer
 
     def get_queryset(self):
-        query = self.request.query_params.get('q')
-        tipo = self.request.query_params.get('t')
-        if query:
-            if tipo == "titulo":
-                return Pelicula.objects.filter(Q(titulo__icontains=query))
-            elif tipo == "director":
-                return Pelicula.objects.filter(Q(director__icontains=query))
-            elif tipo == "genero":
-                return Pelicula.objects.filter(Q(genero__icontains=query))
-            elif tipo == "sinopsis":
-                return Pelicula.objects.filter(Q(sinopsis__icontains=query))
-            elif tipo == "nota":
-                return Pelicula.objects.filter(Q(nota__icontains=query))
-        return Pelicula.objects.all()
+        queryset = Pelicula.objects.all()
+        # Retrieve all relevant query parameters
+        titulo = self.request.query_params.get('titulo')
+        director = self.request.query_params.get('director')
+        genero = self.request.query_params.get('genero')
+        sinopsis = self.request.query_params.get('sinopsis')
+        nota = self.request.query_params.get('nota')
+
+        # Filter based on each parameter if it's provided
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo)
+        if director:
+            queryset = queryset.filter(director__icontains=director)
+        if genero:
+            queryset = queryset.filter(genero__icontains=genero)
+        if sinopsis:
+            queryset = queryset.filter(sinopsis__icontains=sinopsis)
+        if nota:
+            queryset = queryset.filter(nota=nota)  # Assuming 'nota' is a direct match
+
+        return queryset
 
 
 class ReviewListCreateView(generics.ListCreateAPIView):
