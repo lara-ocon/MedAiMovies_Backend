@@ -13,7 +13,7 @@ from django.contrib.auth import authenticate
 from .serializers import PeliculaSerializer, ReviewSerializer
 from .models import Pelicula, Review
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-
+from django.db.models import Avg
 
 class RegistroView(generics.CreateAPIView):
 
@@ -134,6 +134,25 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # Para actualizar la nota de forma dinamica
+    def retrieve(self, request, *args, **kwargs):
+        pelicula = self.get_object()
+        reviews = Review.objects.filter(pelicula=pelicula)
+        nota_media = reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'] or 0
+        response_data = {
+            'id': pelicula.id,
+            'titulo': pelicula.titulo,
+            'fecha_estreno': pelicula.fecha_estreno,
+            'genero': pelicula.genero,
+            'duracion': pelicula.duracion,
+            'pais': pelicula.pais,
+            'director': pelicula.director,
+            'sinopsis': pelicula.sinopsis,
+            'poster': pelicula.poster,
+            'nota': nota_media
+        }
+        return Response(response_data)
 
 
 class PeliculaSearchView(generics.ListAPIView):

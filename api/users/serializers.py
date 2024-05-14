@@ -67,8 +67,8 @@ class PeliculaSerializer(serializers.ModelSerializer):
                   'director',
                   'sinopsis', 
                   'poster',
-                  'nota'
         ]
+        read_only_fields = ['nota']
         
 
 class ReviewSerializer(serializers.ModelSerializer):
@@ -97,6 +97,7 @@ class ReviewSerializer(serializers.ModelSerializer):
         validated_data['usuario_email'] = usuario.email
 
         # Actualizamos la nota de la película
+        """
         pelicula = validated_data['pelicula']
         reviews = models.Review.objects.filter(pelicula=pelicula)
         nota = 0
@@ -105,5 +106,6 @@ class ReviewSerializer(serializers.ModelSerializer):
         nota += validated_data['calificacion']
         pelicula.nota = nota / (len(reviews) + 1)
         pelicula.save()
+        """
 
         return models.Review.objects.create(**validated_data)
