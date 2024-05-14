@@ -153,8 +153,7 @@ class PeliculaSearchView(generics.ListAPIView):
             elif tipo == "sinopsis":
                 return Pelicula.objects.filter(Q(sinopsis__icontains=query))
             elif tipo == "nota":
-                # return Pelicula.objects.filter(Q(nota__icontains=query))
-                print("Falta añadir la nota al modelo")
+                return Pelicula.objects.filter(Q(nota__icontains=query))
         return Pelicula.objects.all()
 
 
