@@ -120,7 +120,7 @@ class LogoutView(generics.DestroyAPIView):
 
 class PeliculaCreateView(generics.CreateAPIView):
     """
-    Vista para listar y crear peliculas
+    Vista para crear peliculas
     """
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
@@ -137,6 +137,10 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class PeliculaSearchView(generics.ListAPIView):
+    """
+    Vista para buscar peliculas
+    """
+
     serializer_class = PeliculaSerializer
 
     def get_queryset(self):
@@ -158,7 +162,7 @@ class PeliculaSearchView(generics.ListAPIView):
         if sinopsis:
             queryset = queryset.filter(sinopsis__icontains=sinopsis)
         if nota:
-            queryset = queryset.filter(nota=nota)  # Assuming 'nota' is a direct match
+            queryset = queryset.filter(nota=nota)
 
         return queryset
 
