@@ -124,7 +124,13 @@ class PeliculaCreateView(generics.CreateAPIView):
     """
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    # para el metodo get
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -139,7 +145,7 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         pelicula = self.get_object()
         reviews = Review.objects.filter(pelicula=pelicula)
-        nota_media = reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'] or 0
+        nota_media = reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'] or 5
         response_data = {
             'id': pelicula.id,
             'titulo': pelicula.titulo,
@@ -152,6 +158,10 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
             'poster': pelicula.poster,
             'nota': nota_media
         }
+        # cambiamos la nota de la pelicula
+        pelicula.nota = nota_media
+        pelicula.save()
+
         return Response(response_data)
 
 
@@ -181,7 +191,9 @@ class PeliculaSearchView(generics.ListAPIView):
         if sinopsis:
             queryset = queryset.filter(sinopsis__icontains=sinopsis)
         if nota:
-            queryset = queryset.filter(nota=nota)
+            # permitimos buscar redondeando, es decir si buscamos
+            # notas de 3, nos valgan pelis en el rango [3, 4)
+            queryset = queryset.filter(nota__gte=float(nota), nota__lt=float(nota)+1)
 
         return queryset
 

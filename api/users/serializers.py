@@ -67,8 +67,8 @@ class PeliculaSerializer(serializers.ModelSerializer):
                   'director',
                   'sinopsis', 
                   'poster',
+                  'nota'
         ]
-        read_only_fields = ['nota']
         
 
 class ReviewSerializer(serializers.ModelSerializer):
