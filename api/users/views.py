@@ -21,6 +21,7 @@ class RegistroView(generics.CreateAPIView):
 
     def handle_exception(self, exc):
         if isinstance(exc, ValidationError) and 'email' in exc.detail and exc.detail['email'][0] == 'user with this email already exists.':
+            exc.detail['email'][0] = "Ya existe un usuario registrado con ese email"
             return Response(exc.detail, status=status.HTTP_409_CONFLICT)
         return super().handle_exception(exc)
 
@@ -45,7 +46,7 @@ class LoginView(generics.CreateAPIView):
 
                 # forma 2
                 """
-                if not created: # ESTO ANTES ERA IF NOT CREATED
+                if not created: # ESTO ANTES ERA IF NOT CREATED
                     response.set_cookie(key='session', value=token.key, secure=True,  samesite='lax')
                     print('response.cookies:', response.cookies)
                 """
