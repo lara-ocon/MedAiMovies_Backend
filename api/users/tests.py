@@ -143,7 +143,7 @@ class TestPeliculaDetailView(TestCase):
         self.assertEqual(response.data['director'], 'Juan Perez')
         self.assertEqual(response.data['sinopsis'], 'Una pelicula de prueba')
         self.assertEqual(response.data['poster'], 'http://example.com/poster.jpg')
-        self.assertNotIn("nota", response.data, "Nota should not be in response")
+        self.assertEqual(response.data['nota'], 5)
 
 class TestPeliculaSearchView(TestCase):
      
