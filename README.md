@@ -60,20 +60,25 @@ Follow these steps to get the project up and running:
   ```
 
 4. **Load initial data into the database (optional):**
-
-python manage.py loaddata peliculas.json
+- The project includes a JSON file `peliculas.json` with sample data for movies. You can load this data into the database using the following command:
+  ```
+  python manage.py loaddata peliculas.json
+  ```
 
 
 5. **Create an admin user:**
-
+To access the Django admin interface, you need to create an admin user. Run the following command:
+```
 python manage.py createsuperuser --username admin --email admin@email.com
 
+```
 Follow the prompts to set a password for the admin user.
 
 6. **Run the server:**
 
-python manage.py runserver
-
+    ```bash
+    python manage.py runserver
+    ```
 
 This starts the development server on `http://127.0.0.1:8000/` where you can access the application.
 
