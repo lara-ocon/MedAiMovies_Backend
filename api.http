@@ -1,4 +1,4 @@
-### TODO: 24 y 25
+
 ### Registro
 
 POST http://127.0.0.1:8000/api/users/

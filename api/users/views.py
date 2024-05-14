@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 
 
 class RegistroView(generics.CreateAPIView):
-    # TODO 13 y 15
+
     serializer_class = serializers.UsuarioSerializer
 
     def handle_exception(self, exc):
@@ -26,7 +26,7 @@ class RegistroView(generics.CreateAPIView):
 
 
 class LoginView(generics.CreateAPIView):
-    # TODO 16
+
     serializer_class = serializers.LoginSerializer
 
     def post(self, request):

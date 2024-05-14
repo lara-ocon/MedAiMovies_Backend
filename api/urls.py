@@ -3,7 +3,6 @@ from django.urls import path
 from api.users import views
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView
 
-# TODO:s 13, 16, 18, 19
 urlpatterns = [
     path('', views.RegistroView.as_view(), name='init'),
     path('admin/', admin.site.urls),

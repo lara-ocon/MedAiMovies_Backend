@@ -2,7 +2,6 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class Usuario(AbstractUser):
-    # TODO: 2
 
     nombre = models.CharField(max_length=256)
     tel = models.CharField(max_length=32, null=True, blank=True)

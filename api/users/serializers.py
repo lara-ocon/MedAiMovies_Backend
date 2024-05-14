@@ -6,7 +6,7 @@ from api.users import models
 class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
-        # TODO: 5 y 22
+
         model = models.Usuario
         fields = ['id', 'nombre', 'tel', 'email', 'password']
         extra_kwargs = {
@@ -38,12 +38,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
         """
     
 class LoginSerializer(serializers.Serializer):
-    # TODO: 10
+
     email = serializers.EmailField()
     password = serializers.CharField()
 
     def validate(self, data):
-        # TODO: 11
 
         email = data['email']
         password = data['password']

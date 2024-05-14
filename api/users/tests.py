@@ -3,7 +3,6 @@ from django.test import SimpleTestCase, TestCase
 from api.users import serializers
 
 class TestUsuarioSerializer(SimpleTestCase):
-    # TODO: 21
     
     def test_validate_password(self):
 
@@ -16,7 +15,6 @@ class TestUsuarioSerializer(SimpleTestCase):
 
 
 class TestRegistroView(TestCase):
-    # TODO: 22
     
     def test_registro(self):
         data = {
