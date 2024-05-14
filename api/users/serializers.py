@@ -13,6 +13,12 @@ class UsuarioSerializer(serializers.ModelSerializer):
             'password': {'write_only': True, 'required': False}
         }
 
+    def validate_tel(self, value):
+            # Verifica que el numero de telefono tenga entre 7 y 9 digitos
+            if re.match(r'^[0-9]{7,9}$', value):
+                return value
+            else:
+                raise exceptions.ValidationError('Invalid phone number format')
 
     def validate_password(self, value):
 
