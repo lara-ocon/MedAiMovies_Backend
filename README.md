@@ -1,6 +1,11 @@
 
 # MedAiMovies_Backend
 
+In this Readme file you will find the instructions to set up and deploy the backend of the MedAiMovies project. This project is a movie review platform that allows users to register, log in, search for movies, view movie details, and write reviews for movies. The backend is built using Django and Django REST Framework (DRF) to provide a RESTful API for the frontend to interact with.
+
+This backend is already deployed using render.com, so you can access the API through the following link [MedAIMovies-Backend](https://medaimovies-backend.onrender.com/). Consequently, you can ignore the following setup instructions if you want to use the deployed version. However, we recommend you to read the instructions to familiriaze yourself with the project.
+
+
 ## Setup and Deployment
 
 Follow these steps to get the project up and running:
@@ -42,7 +47,7 @@ Follow these steps to get the project up and running:
   ```
 
 4. **Load initial data into the database (optional):**
-- The project includes a JSON file `peliculas.json` with sample data for movies. You can load this data into the database using the following command:
+- The project includes a JSON file `peliculas.json` with sample data for movies. You can add movies to this file if you wish and load this data into the database using the following command:
   ```
   python manage.py loaddata peliculas.json
   ```

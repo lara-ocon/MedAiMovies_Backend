@@ -1,21 +1,18 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from django.db.utils import IntegrityError
-from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
 from api.users import serializers
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
-from django.contrib.auth import authenticate
 from .serializers import PeliculaSerializer, ReviewSerializer
 from .models import Pelicula, Review
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from django.db.models import Avg
 from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
+
 
 class RegistroView(generics.CreateAPIView):
 
@@ -36,23 +33,8 @@ class LoginView(generics.CreateAPIView):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.validated_data)
-                print('login token:', token.key)
-                print('login created:', created)
                 response = Response({'status': 'success', 'token': token.key, 'userId': token.user.id, 'email': token.user.email})
-
-                # forma 1
-                # response.set_cookie(key='session', value=token.key, secure=False, httponly=True, samesite='lax') # secure = false para desarrollo
                 response.set_cookie(key='session', value=token.key, samesite='None', httponly=True, secure=True) # secure = false para desarrollo
-                # response.set_cookie(key='session', value=token.key, samesite='lax')
-                print('response.cookies:', response.cookies)
-
-                # forma 2
-                """
-                if not created: # ESTO ANTES ERA IF NOT CREATED
-                    response.set_cookie(key='session', value=token.key, secure=True,  samesite='lax')
-                    print('response.cookies:', response.cookies)
-                """
-                print('response:', response)
                 return response
             else:
                 print('serializer.errors:', serializer.errors)
@@ -66,18 +48,12 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
     def get_object(self):
         # Obtiene el token del usuario desde la cookie en la solicitud
         token_key = self.request.COOKIES.get('session')
-        print('token_key:', token_key)
-        print('cookies en usuario view:', self.request.COOKIES)
         if not token_key:
-            print('raise NotFound')
             raise NotFound('Session does not exist')
         try:
             token = Token.objects.get(key=token_key)
-            print('token:', token)
-            print('token.user:', token.user)
             return token.user
         except Token.DoesNotExist:
-            print('raise NotFound 2')
             raise NotFound('Session does not exist')
         
     def delete(self, request, *args, **kwargs):
@@ -94,7 +70,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         return response
 
 
-
 @extend_schema(
     description='Logout endpoint',
     responses={
@@ -107,29 +82,21 @@ class LogoutView(generics.DestroyAPIView):
     def delete(self, request, *args, **kwargs):
         try:
             token_key = request.COOKIES.get('session')
-            print('token_key to delete:', token_key)
             token = Token.objects.get(key=token_key)
             token.delete()
             response = Response(status=status.HTTP_204_NO_CONTENT)
-            print('cookie de session antes de borrar:', response.cookies)
-            # response.delete_cookie('session')
             response.delete_cookie('session', path='/', domain='127.0.0.1', samesite='None')
-            print('se ha borrado la cookie de session')
             return response
         except Token.DoesNotExist:
-            print('no existe token a borrar')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PeliculaCreateView(generics.CreateAPIView):
-    """
-    Vista para crear peliculas
-    """
+
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
-    # para el metodo get
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
@@ -137,9 +104,8 @@ class PeliculaCreateView(generics.CreateAPIView):
 
 
 class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
-    """
-    Vista para ver, actualizar y eliminar peliculas
-    """
+
+    # Vista para ver, actualizar y eliminar peliculas
     queryset = Pelicula.objects.all()
     serializer_class = PeliculaSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
@@ -170,6 +136,7 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
 
         return Response(response_data)
 
+
 @extend_schema(
     parameters=[
         OpenApiParameter(name='titulo', description='Filtrar por título de película', required=False, type=OpenApiTypes.STR),
@@ -180,22 +147,20 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     ]
 )
 class PeliculaSearchView(generics.ListAPIView):
-    """
-    Vista para buscar peliculas
-    """
 
+    # Vista para buscar peliculas
     serializer_class = PeliculaSerializer
 
     def get_queryset(self):
         queryset = Pelicula.objects.all()
-        # Retrieve all relevant query parameters
+        # Obtenemos los queryparams
         titulo = self.request.query_params.get('titulo')
         director = self.request.query_params.get('director')
         genero = self.request.query_params.get('genero')
         sinopsis = self.request.query_params.get('sinopsis')
         nota = self.request.query_params.get('nota')
 
-        # Filter based on each parameter if it's provided
+        # Hacemos un filtro en función de los queryparams recibidos
         if titulo:
             queryset = queryset.filter(titulo__icontains=titulo)
         if director:
@@ -205,8 +170,7 @@ class PeliculaSearchView(generics.ListAPIView):
         if sinopsis:
             queryset = queryset.filter(sinopsis__icontains=sinopsis)
         if nota:
-            # permitimos buscar redondeando, es decir si buscamos
-            # notas de 3, nos valgan pelis en el rango [3, 4)
+            # Permitimos buscar redondeando, es decir con nota 3, nos valen pelis en el rango [3, 4)
             queryset = queryset.filter(nota__gte=float(nota), nota__lt=float(nota)+1)
 
         return queryset
@@ -217,15 +181,14 @@ class ReviewListCreateView(generics.ListCreateAPIView):
     queryset = Review.objects.all()
     serializer_class = ReviewSerializer
 
-    # when POST request is made
+    # Para el POST
     def perform_create(self, serializer):
         serializer.save()
 
-    # when GET request is made
+    # Para el GET
     def get_queryset(self):
         queryset = Review.objects.all()
         pelicula_id = self.request.query_params.get('pelicula', None)
-        print('pelicula_id:', pelicula_id)
         if pelicula_id is not None:
             queryset = queryset.filter(pelicula__id=pelicula_id)
         return queryset

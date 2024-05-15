@@ -62,24 +62,10 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 
 ]
-"""
-CORS_ALLOW_ALL_ORIGINS = False  # Cambia esto a False
-CORS_ALLOW_CREDENTIALS = True   # Permite el envío de credenciales
-CORS_ALLOWED_ORIGINS = [
-'http://localhost:5173',  # Solo permite peticiones de este origen
-]
-"""
 
 # Esta funciona
 CORS_ALLOW_ALL_ORIGINS = True  # Cambia esto a False
 CORS_ALLOW_CREDENTIALS = True 
-
-"""
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-]
-"""
 
 ROOT_URLCONF = 'api.urls'
 

@@ -3,6 +3,7 @@ from rest_framework import serializers, exceptions
 from django.contrib.auth import authenticate
 from api.users import models
 
+
 class UsuarioSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -37,11 +38,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
         instance.tel = validated_data.get('tel', instance.tel)
         instance.save()
         return instance
-        """Si quisiseramos actualizar la contraseña tambien, descomentar lo siguiente:
-        if (validated_data.get('password')):
-            instance.set_password(validated_data.pop('password'))
-        return super().update(instance, validated_data)
-        """
+
     
 class LoginSerializer(serializers.Serializer):
 
@@ -78,7 +75,6 @@ class PeliculaSerializer(serializers.ModelSerializer):
         
 
 class ReviewSerializer(serializers.ModelSerializer):
-    # usuario_id = serializers.IntegerField(write_only=True) para que tambien se vea, se bueno tenerlo puesto por privacidad
     usuario_id = serializers.IntegerField(write_only=False)
     usuario_email = serializers.EmailField(read_only=True) # para q no se pueda escribir pero si leer
 
@@ -101,17 +97,5 @@ class ReviewSerializer(serializers.ModelSerializer):
         usuario = models.Usuario.objects.get(pk=usuario_id)
         validated_data['usuario'] = usuario
         validated_data['usuario_email'] = usuario.email
-
-        # Actualizamos la nota de la película
-        """
-        pelicula = validated_data['pelicula']
-        reviews = models.Review.objects.filter(pelicula=pelicula)
-        nota = 0
-        for review in reviews:
-            nota += review.calificacion
-        nota += validated_data['calificacion']
-        pelicula.nota = nota / (len(reviews) + 1)
-        pelicula.save()
-        """
 
         return models.Review.objects.create(**validated_data)

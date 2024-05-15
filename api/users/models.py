@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class Usuario(AbstractUser):
 
     nombre = models.CharField(max_length=256)
@@ -27,16 +28,15 @@ class Pelicula(models.Model):
     sinopsis = models.TextField()
     poster = models.URLField()
     nota = models.FloatField(null=True)
-    # otros campos relevantes para una película
 
     def __str__(self):
         return self.titulo
 
+
 class Review(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reseñas')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
-    # usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='reseñas') asi da otro error (solo se puede hacer una review por  usuario)
-    usuario_email = models.EmailField()  # Agregado para almacenar el email del usuario
+    usuario_email = models.EmailField()
     calificacion = models.IntegerField()
     comentario = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
