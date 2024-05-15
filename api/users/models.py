@@ -12,6 +12,9 @@ class Usuario(AbstractUser):
         if not self.username:
             self.username = self.email
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.email
 
 
 class Pelicula(models.Model):
@@ -26,6 +29,9 @@ class Pelicula(models.Model):
     nota = models.FloatField(null=True)
     # otros campos relevantes para una película
 
+    def __str__(self):
+        return self.titulo
+
 class Review(models.Model):
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reseñas')
     usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
@@ -34,3 +40,6 @@ class Review(models.Model):
     calificacion = models.IntegerField()
     comentario = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.usuario} - {self.pelicula}'

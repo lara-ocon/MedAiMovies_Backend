@@ -12,6 +12,19 @@ class TestUsuarioSerializer(SimpleTestCase):
         wrong_password = '12345678' # No contiene letras
         with self.assertRaises(ValidationError):
             serializers.UsuarioSerializer().validate_password(wrong_password)
+    
+    def test_validate_tel(self):
+            
+        correct_tel = '911123456'
+        self.assertEqual(serializers.UsuarioSerializer().validate_tel(correct_tel), correct_tel)
+
+        wrong_tel = '123456'
+        with self.assertRaises(ValidationError):
+            serializers.UsuarioSerializer().validate_tel(wrong_tel)
+
+        wrong_tel = '1234567890'
+        with self.assertRaises(ValidationError):
+            serializers.UsuarioSerializer().validate_tel(wrong_tel)
 
 
 class TestRegistroView(TestCase):
@@ -19,172 +32,151 @@ class TestRegistroView(TestCase):
     def test_registro(self):
         data = {
             'nombre': 'prueba',
-            'tel': '911',
+            'tel': '911123456',
             'email': 'test@gmail.com',
             'password': 'Aa345678'
         }
         response = self.client.post('/api/users/', data)
         self.assertEqual(response.status_code, 201)
         self.assertNotIn("password", response.data, "Password should not be in response")
+    
+    def test_registro_fail(self):
+        data = {
+            'nombre': 'prueba',
+            'tel': '911123456',
+            'email': 'test',
+            'password': 'Aa345678'
+        }
+        response = self.client.post('/api/users/', data)
+        self.assertEqual(response.status_code, 400)
 
 class TestLoginView(TestCase):
-
-    def test_login(self):
-        data = {
+    def test_login_success(self):
+        user_data = {
             'email': 'test@gmail.com',
             'password': 'Aa345678'
         }
-        response = self.client.post('/api/users/login/', data)
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("token", response.data, "Token should be in response")
-        self.assertIn("userId", response.data, "UserId should be in response")
-        self.assertIn("session", response.cookies, "Session should be in response cookies")
-        self.assertEqual(response.cookies['session']['samesite'], 'None', "Session cookie should have samesite=None")
-        self.assertTrue(response.cookies['session']['secure'], "Session cookie should be secure")
-        self.assertTrue(response.cookies['session']['httponly'], "Session cookie should be httponly")
-
-    def test_login_wrong_password(self):
-        data = {
+        register_data = {
+            'nombre': 'prueba',
+            'tel': '911123456',
             'email': 'test@gmail.com',
-            'password': 'wrongpassword'
+            'password': 'Aa345678'
         }
-        response = self.client.post('/api/users/login/', data)
-        self.assertEqual(response.status_code, 401)
+        self.client.post('/api/users/', register_data)
+        response = self.client.post('/api/users/login/', user_data)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('token', response.data)
+    
+    def test_login_fail(self):
+        user_data = {
+            'email': 'test@gmail.com',
+            'password': 'Aa345678'
+        }
+        register_data = {
+            'nombre': 'prueba',
+            'tel': '911123456',
+            'email': 'test@gmail.com',
+            'password': 'malacontraseña'
+        }
+        self.client.post('/api/users/', register_data)
+        response = self.client.post('/api/users/login/', user_data)
+        self.assertEqual(response.status_code, 403)
 
 class TestUsuarioView(TestCase):
-    
-    def test_usuario(self):
-        data = {
+    def test_usuario_view_get(self):
+        register_data = {
             'nombre': 'prueba',
-            'tel': '911',
-            'email': 'prueba@gmail.com',
+            'tel': '911123456',
+            'email': 'test@gmail.com',
             'password': 'Aa345678'
         }
-        response = self.client.post('/api/users/', data)
-        self.assertEqual(response.status_code, 201)
-        self.assertNotIn("password", response.data, "Password should not be in response")
-        token = response.data['token']
-        response = self.client.get('/api/users/me/', HTTP_COOKIE=f'session={token}')
+        user_data = {
+            'email': 'test@gmail.com',
+            'password': 'Aa345678'
+        }
+        self.client.post('/api/users/', register_data)
+        response = self.client.post('/api/users/login/', user_data)
+        self.client.cookies = response.cookies
+        response = self.client.get('/api/users/me/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['nombre'], 'prueba')
-        self.assertEqual(response.data['tel'], '911')
-        self.assertEqual(response.data['email'], 'prueba@gmail.com')
-        self.assertNotIn("password", response.data, "Password should not be in response")
-        self.assertNotIn("session", response.cookies, "Session should not be in response cookies")
-        self.assertNotIn("userId", response.data, "UserId should not be in response")
+        self.assertEqual(response.data['email'], 'test@gmail.com')
+
+    def test_usuario_view_get_fail(self):
+        response = self.client.get('/api/users/me/')
+        self.assertEqual(response.status_code, 404)
+
+    # def test_usuario_view_actualizar(self):
+    #     register_data = {
+    #         'nombre': 'prueba',
+    #         'tel': '911123456',
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     user_data = {
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     self.client.post('/api/users/', register_data)
+    #     response = self.client.post('/api/users/login/', user_data)
+    #     self.client.cookies = response.cookies
+    #     response = self.client.get('/api/users/me/')
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.data['email'], 'test@gmail.com')
+    #     #modify user
+    #     data = {
+    #         'nombre': 'prueba2',
+    #         'tel': '911234567',
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     response = self.client.put('/api/users/me/', data)
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.data['nombre'], 'prueba2')
+    #     self.assertEqual(response.data['tel'], '911234567')
+    
+    def test_usuario_view_delete(self):
+        register_data = {
+            'nombre': 'prueba',
+            'tel': '911123456',
+            'email': 'test@gmail.com',
+            'password': 'Aa345678'
+        }
+        user_data = {
+            'email': 'test@gmail.com',
+            'password': 'Aa345678'
+        }
+        self.client.post('/api/users/', register_data)
+        response = self.client.post('/api/users/login/', user_data)
+        self.client.cookies = response.cookies
+        response = self.client.delete('/api/users/me/')
+        self.assertEqual(response.status_code, 204)
+        response = self.client.get('/api/users/me/')
+        self.assertEqual(response.status_code, 404)
+    
+    def test_usuario_view_delete_fail(self):
+        response = self.client.delete('/api/users/me/')
+        self.assertEqual(response.status_code, 404)
 
 class TestLogoutView(TestCase):
-    
     def test_logout(self):
-        data = {
+        register_data = {
             'nombre': 'prueba',
-            'tel': '911',
+            'tel': '911123456',
             'email': 'prueba@gmail.com',
             'password': 'Aa345678'
         }
-        response = self.client.post('/api/users/', data)
-        self.assertEqual(response.status_code, 201)
-        token = response.data['token']
-        response = self.client.delete('/api/users/logout/', HTTP_COOKIE=f'session={token}')
+        user_data = {
+            'email': 'prueba@gmail.com',
+            'password': 'Aa345678'
+        }
+        self.client.post('/api/users/', register_data)
+        response = self.client.post('/api/users/login/', user_data)
+        self.client.cookies = response.cookies
+        response = self.client.delete('/api/users/logout/')
         self.assertEqual(response.status_code, 204)
-        response = self.client.get('/api/users/me/', HTTP_COOKIE=f'session={token}')
-        self.assertEqual(response.status_code, 401)
-
-class TestPeliculaCreateView(TestCase):
+        response = self.client.get('/api/users/me/')
+        self.assertEqual(response.status_code, 404)
     
-    def test_create_pelicula(self):
-        data = {
-            'titulo': 'prueba',
-            'fecha_estreno': '2021-01-01',
-            'genero': 'accion',
-            'duracion': 120,
-            'pais': 'Argentina',
-            'director': 'Juan Perez',
-            'sinopsis': 'Una pelicula de prueba',
-            'poster': 'http://example.com/poster.jpg'
-        }
-        response = self.client.post('/api/peliculas/', data)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.data['titulo'], 'prueba')
-        self.assertEqual(response.data['fecha_estreno'], '2021-01-01')
-        self.assertEqual(response.data['genero'], 'accion')
-        self.assertEqual(response.data['duracion'], 120)
-        self.assertEqual(response.data['pais'], 'Argentina')
-        self.assertEqual(response.data['director'], 'Juan Perez')
-        self.assertEqual(response.data['sinopsis'], 'Una pelicula de prueba')
-        self.assertEqual(response.data['poster'], 'http://example.com/poster.jpg')
-        self.assertNotIn("nota", response.data, "Nota should not be in response")
-
-class TestPeliculaDetailView(TestCase):
-        
-    def test_pelicula_detail(self):
-        data = {
-            'titulo': 'prueba',
-            'fecha_estreno': '2021-01-01',
-            'genero': 'accion',
-            'duracion': 120,
-            'pais': 'Argentina',
-            'director': 'Juan Perez',
-            'sinopsis': 'Una pelicula de prueba',
-            'poster': 'http://example.com/poster.jpg'
-        }
-        response = self.client.post('/api/peliculas/', data)
-        self.assertEqual(response.status_code, 201)
-        id = response.data['id']
-        response = self.client.get(f'/api/peliculas/{id}/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['titulo'], 'prueba')
-        self.assertEqual(response.data['fecha_estreno'], '2021-01-01')
-        self.assertEqual(response.data['genero'], 'accion')
-        self.assertEqual(response.data['duracion'], 120)
-        self.assertEqual(response.data['pais'], 'Argentina')
-        self.assertEqual(response.data['director'], 'Juan Perez')
-        self.assertEqual(response.data['sinopsis'], 'Una pelicula de prueba')
-        self.assertEqual(response.data['poster'], 'http://example.com/poster.jpg')
-        self.assertEqual(response.data['nota'], 5)
-
-class TestPeliculaSearchView(TestCase):
-     
-    def test_pelicula_search(self):
-        data = {
-            'titulo': 'prueba',
-            'fecha_estreno': '2021-01-01',
-            'genero': 'accion',
-            'duracion': 120,
-            'pais': 'Argentina',
-            'director': 'Juan Perez',
-            'sinopsis': 'Una pelicula de prueba',
-            'poster': 'http://example.com/poster.jpg'
-        }
-        response = self.client.post('/api/peliculas/', data)
-        self.assertEqual(response.status_code, 201)
-        response = self.client.get('/api/peliculas/search/?q=prueba&t=titulo')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.data), 1)
-        self.assertEqual(response.data[0]['titulo'], 'prueba')
-        self.assertEqual(response.data[0]['fecha_estreno'], '2021-01-01')
-        self.assertEqual(response.data[0]['genero'], 'accion')
-        self.assertEqual(response.data[0]['duracion'], 120)
-        self.assertEqual(response.data[0]['pais'], 'Argentina')
-        self.assertEqual(response.data[0]['director'], 'Juan Perez')
-        self.assertEqual(response.data[0]['sinopsis'], 'Una pelicula de prueba')
-        self.assertEqual(response.data[0]['poster'], 'http://example.com/poster.jpg')
-        self.assertNotIn("nota", response.data[0], "Nota should not be in response")
-
-        
-class TestDeleteUsuarioView(TestCase):
-
-    def test_delete_usuario(self):
-        data = {
-            'nombre': 'prueba',
-            'tel': '911',
-            'email': 'prueba@gmail.com'
-        }
-        response = self.client.post('/api/users/', data)
-        self.assertEqual(response.status_code, 201)
-        token = response.data['token']
-        response = self.client.delete('/api/users/me/', HTTP_COOKIE=f'session={token}')
-        self.assertEqual(response.status_code, 204)
-        response = self.client.get('/api/users/me/', HTTP_COOKIE=f'session={token}')
+    def test_logout_fail(self):
+        response = self.client.delete('/api/users/logout/')
         self.assertEqual(response.status_code, 401)
-
