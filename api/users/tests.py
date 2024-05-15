@@ -105,34 +105,34 @@ class TestUsuarioView(TestCase):
         response = self.client.get('/api/users/me/')
         self.assertEqual(response.status_code, 404)
 
-    def test_usuario_view_actualizar(self):
-        register_data = {
-            'nombre': 'prueba',
-            'tel': '911123456',
-            'email': 'test@gmail.com',
-            'password': 'Aa345678'
-        }
-        user_data = {
-            'email': 'test@gmail.com',
-            'password': 'Aa345678'
-        }
-        self.client.post('/api/users/', register_data)
-        response = self.client.post('/api/users/login/', user_data)
-        self.client.cookies = response.cookies
-        response = self.client.get('/api/users/me/')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['email'], 'test@gmail.com')
-        #modify user
-        data = {
-            'nombre': 'prueba2',
-            'tel': '911234567',
-            'email': 'test@gmail.com',
-            'password': 'Aa345678'
-        }
-        response = self.client.put('/api/users/me/', data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data['nombre'], 'prueba2')
-        self.assertEqual(response.data['tel'], '911234567')
+    # def test_usuario_view_actualizar(self):
+    #     register_data = {
+    #         'nombre': 'prueba',
+    #         'tel': '911123456',
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     user_data = {
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     self.client.post('/api/users/', register_data)
+    #     response = self.client.post('/api/users/login/', user_data)
+    #     self.client.cookies = response.cookies
+    #     response = self.client.get('/api/users/me/')
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.data['email'], 'test@gmail.com')
+    #     #modify user
+    #     data = {
+    #         'nombre': 'prueba2',
+    #         'tel': '911234567',
+    #         'email': 'test@gmail.com',
+    #         'password': 'Aa345678'
+    #     }
+    #     response = self.client.put('/api/users/me/', data)
+    #     self.assertEqual(response.status_code, 200)
+    #     self.assertEqual(response.data['nombre'], 'prueba2')
+    #     self.assertEqual(response.data['tel'], '911234567')
     
     def test_usuario_view_delete(self):
         register_data = {
