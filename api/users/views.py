@@ -14,6 +14,8 @@ from .serializers import PeliculaSerializer, ReviewSerializer
 from .models import Pelicula, Review
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from django.db.models import Avg
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 
 class RegistroView(generics.CreateAPIView):
 
@@ -146,7 +148,7 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         pelicula = self.get_object()
         reviews = Review.objects.filter(pelicula=pelicula)
-        nota_media = reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'] or 5
+        nota_media = round(reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'], 2) or 5
         response_data = {
             'id': pelicula.id,
             'titulo': pelicula.titulo,
@@ -165,7 +167,15 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
 
         return Response(response_data)
 
-
+@extend_schema(
+    parameters=[
+        OpenApiParameter(name='titulo', description='Filtrar por título de película', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='director', description='Filtrar por director', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='genero', description='Filtrar por género', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='sinopsis', description='Filtrar por sinopsis', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='nota', description='Filtrar por nota', required=False, type=OpenApiTypes.FLOAT),
+    ]
+)
 class PeliculaSearchView(generics.ListAPIView):
     """
     Vista para buscar peliculas
