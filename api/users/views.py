@@ -148,7 +148,10 @@ class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
     def retrieve(self, request, *args, **kwargs):
         pelicula = self.get_object()
         reviews = Review.objects.filter(pelicula=pelicula)
-        nota_media = round(reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'], 2) or 5
+        try:
+            nota_media = round(reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'], 2)
+        except:
+            nota_media = 5
         response_data = {
             'id': pelicula.id,
             'titulo': pelicula.titulo,
