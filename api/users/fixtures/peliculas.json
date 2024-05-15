@@ -168,14 +168,14 @@
         "model": "users.pelicula",
         "pk": 12,
         "fields": {
-            "titulo": "Harry Potter y la piedra filosofal",
+            "titulo": "Harry Potter",
             "fecha_estreno": "2001-11-16",
             "genero": "Fantasía",
             "duracion": 152,
             "pais": "Reino Unido",
             "director": "Chris Columbus",
             "sinopsis": "Un niño huérfano descubre que es un mago y comienza su educación en la Escuela de Magia y Hechicería de Hogwarts.",
-            "poster": "https://th.bing.com/th/id/R.03817e8c2ec88e6d40dfc2ede15b8453?rik=v51%2ftyujj82K%2bA&riu=http%3a%2f%2f3.bp.blogspot.com%2f-TF8bS9iO95Q%2fTdhgtn3MXTI%2fAAAAAAAAAi4%2f66xBC_2W1QU%2fs1600%2fharry-potter-y-la-piedra-filosofal-poster.jpg&ehk=2fVJYJgJxFKH9Wd4%2bdoJwg3O2j1IZSRoQZC%2bQCLELXY%3d&risl=&pid=ImgRaw&r=0",
+            "poster": "https://image.tmdb.org/t/p/original/skW6AldRx22QNafkvRWbDHF8Ujd.jpg",
             "nota": 5
         }
     },
@@ -183,7 +183,7 @@
         "model": "users.pelicula",
         "pk": 13,
         "fields": {
-            "titulo": "El señor de los anillos: La comunidad del anillo",
+            "titulo": "El señor de los anillos",
             "fecha_estreno": "2001-12-19",
             "genero": "Fantasía",
             "duracion": 178,
