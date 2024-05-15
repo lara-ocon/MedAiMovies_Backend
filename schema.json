@@ -316,6 +316,49 @@
             "get": {
                 "operationId": "api_peliculas_search_list",
                 "description": "Vista para buscar peliculas",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "director",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por director"
+                    },
+                    {
+                        "in": "query",
+                        "name": "genero",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por género"
+                    },
+                    {
+                        "in": "query",
+                        "name": "nota",
+                        "schema": {
+                            "type": "number",
+                            "format": "float"
+                        },
+                        "description": "Filtrar por nota"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sinopsis",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por sinopsis"
+                    },
+                    {
+                        "in": "query",
+                        "name": "titulo",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Filtrar por título de película"
+                    }
+                ],
                 "tags": [
                     "api"
                 ],
