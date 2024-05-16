@@ -1,4 +1,3 @@
-
 # MedAiMovies_Backend
 
 In this Readme file you will find the instructions to set up and deploy the backend of the MedAiMovies project. This project is a movie review platform that allows users to register, log in, search for movies, view movie details, and write reviews for movies. The backend is built using Django and Django REST Framework (DRF) to provide a RESTful API for the frontend to interact with.
@@ -112,3 +111,9 @@ These endpoints provide a schema and human-readable documentation for the API.
 ## Further Information
 
 For more detailed usage, you can refer to the DRF (Django REST Framework) documentation and Django documentation to understand how views, serializers, and routing are handled in this project.
+
+## Demo of backend and frontend deployed
+
+https://github.com/lara-ocon/MedAiMovies_Frontend/assets/112928240/be250487-aff7-4692-991f-ab931705c9a7
+
+[Wath video in Google Drive](https://drive.google.com/file/d/15gQoJTe20PseySbKAEZs_FACHSNanDel/view?usp=sharing)
