@@ -37,7 +37,6 @@ class LoginView(generics.CreateAPIView):
                 response.set_cookie(key='session', value=token.key, samesite='None', httponly=True, secure=True) # secure = false para desarrollo
                 return response
             else:
-                print('serializer.errors:', serializer.errors)
                 return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
@@ -58,9 +57,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
         
     def delete(self, request, *args, **kwargs):
         response = super().delete(request, *args, **kwargs) # metodo original de la clase
-        print('response:', response.status_code)
-        print('llamamos a delete')
-        print('cookies 1', response.cookies)
         if response.status_code == status.HTTP_204_NO_CONTENT:
             token_key = request.COOKIES.get('session')
             if token_key:
@@ -69,7 +65,6 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
                     token.delete()
                 except Token.DoesNotExist:
                     pass
-            print('cookiess:', response.cookies)
             response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
         return response
 
@@ -84,14 +79,11 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
 class LogoutView(generics.DestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
-        print('llamamos a delete')
-        print('cookies 1', request.COOKIES)
         try:
             token_key = request.COOKIES.get('session')
             token = Token.objects.get(key=token_key)
             token.delete()
             response = Response(status=status.HTTP_204_NO_CONTENT)
-            print('cookiess:', response.cookies)
             response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
             return response
         except Token.DoesNotExist:
