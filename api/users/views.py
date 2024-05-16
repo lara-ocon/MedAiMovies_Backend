@@ -66,6 +66,7 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
                     token.delete()
                 except Token.DoesNotExist:
                     pass
+            print('cookiess:', response.cookies)
             response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
         return response
 
@@ -85,6 +86,7 @@ class LogoutView(generics.DestroyAPIView):
             token = Token.objects.get(key=token_key)
             token.delete()
             response = Response(status=status.HTTP_204_NO_CONTENT)
+            print('cookiess:', response.cookies)
             response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
             return response
         except Token.DoesNotExist:
