@@ -1,83 +1,74 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from django.db.utils import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
 from api.users import serializers
 from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError, NotFound
-from django.contrib.auth import authenticate
-
-
+from .serializers import PeliculaSerializer, ReviewSerializer
+from .models import Pelicula, Review
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.db.models import Avg
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from drf_spectacular.types import OpenApiTypes
 
 
 class RegistroView(generics.CreateAPIView):
-    # TODO 13 y 15
+
     serializer_class = serializers.UsuarioSerializer
 
     def handle_exception(self, exc):
         if isinstance(exc, ValidationError) and 'email' in exc.detail and exc.detail['email'][0] == 'user with this email already exists.':
+            exc.detail['email'][0] = "Ya existe un usuario registrado con ese email"
             return Response(exc.detail, status=status.HTTP_409_CONFLICT)
         return super().handle_exception(exc)
 
 
-
 class LoginView(generics.CreateAPIView):
-    # TODO 16
+
     serializer_class = serializers.LoginSerializer
 
     def post(self, request):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 token, created = Token.objects.get_or_create(user=serializer.validated_data)
-                print('login token:', token.key)
-                print('login created:', created)
-                response = Response({'status': 'success'})
-
-                # forma 1
-                # response.set_cookie(key='session', value=token.key, secure=False, httponly=True, samesite='lax') # secure = false para desarrollo
-                response.set_cookie(key='session', value=token.key, samesite='lax') # secure = false para desarrollo
-                print('response.cookies:', response.cookies)
-
-                # forma 2
-                """
-                if not created: # ESTO ANTES ERA IF NOT CREATED
-                    response.set_cookie(key='session', value=token.key, secure=True, httponly=True, samesite='lax')
-                    print('response.cookies:', response.cookies)
-                """
+                response = Response({'status': 'success', 'token': token.key, 'userId': token.user.id, 'email': token.user.email})
+                response.set_cookie(key='session', value=token.key, samesite='None', httponly=True, secure=True) # secure = false para desarrollo
                 return response
             else:
-                print('serializer.errors:', serializer.errors)
                 return Response({'error': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-
 class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
-    # TODO 18 y 20
+
     serializer_class = serializers.UsuarioSerializer
 
     def get_object(self):
         # Obtiene el token del usuario desde la cookie en la solicitud
         token_key = self.request.COOKIES.get('session')
-        print('token_key:', token_key)
-        print('cookies:', self.request.COOKIES)
         if not token_key:
-            print('raise NotFound')
             raise NotFound('Session does not exist')
         try:
             token = Token.objects.get(key=token_key)
-            print('token:', token)
-            print('token.user:', token.user)
             return token.user
         except Token.DoesNotExist:
-            print('raise NotFound 2')
             raise NotFound('Session does not exist')
+        
+    def delete(self, request, *args, **kwargs):
+        response = super().delete(request, *args, **kwargs) # metodo original de la clase
+        if response.status_code == status.HTTP_204_NO_CONTENT:
+            token_key = request.COOKIES.get('session')
+            if token_key:
+                try:
+                    token = Token.objects.get(key=token_key)
+                    token.delete()
+                except Token.DoesNotExist:
+                    pass
+            response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
+        return response
 
 
-
-# TODO 26
 @extend_schema(
     description='Logout endpoint',
     responses={
@@ -86,111 +77,117 @@ class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
     }
 )
 class LogoutView(generics.DestroyAPIView):
-    # TODO 19
+
     def delete(self, request, *args, **kwargs):
         try:
             token_key = request.COOKIES.get('session')
-            print('token_key to delete:', token_key)
             token = Token.objects.get(key=token_key)
             token.delete()
             response = Response(status=status.HTTP_204_NO_CONTENT)
-            response.delete_cookie('session')
+            response.delete_cookie('session', path='/', domain='medaimovies-backend.onrender.com', samesite='None')
             return response
         except Token.DoesNotExist:
-            print('no existe token a borrar')
             return Response(status=status.HTTP_401_UNAUTHORIZED)
-        
-# version Miguel
-"""
-from rest_framework import generics, status
-from rest_framework.response import Response
-from rest_framework.authtoken.models import Token
-from rest_framework.exceptions import ValidationError
-from django.db.utils import IntegrityError
-from django.core.exceptions import ObjectDoesNotExist
-from api.users import serializers
-from drf_spectacular.utils import extend_schema, OpenApiResponse
-from django.http import Http404
 
 
-class RegistroView(generics.CreateAPIView):
-    # TODO: 13 y 15
+class PeliculaCreateView(generics.CreateAPIView):
 
-    serializer_class = serializers.UsuarioSerializer 
+    queryset = Pelicula.objects.all()
+    serializer_class = PeliculaSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    def handle_exception(self, exc):
-        if isinstance(exc, ValidationError):
-            return Response(exc.detail, status=status.HTTP_409_CONFLICT)
-        else:
-            return super().handle_exception(exc)
-
-
-class LoginView(generics.CreateAPIView):
-    # TODO: 16
-    serializer_class = serializers.LoginSerializer
-
-    def post(self, request):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.validated_data
-            token, created = Token.objects.get_or_create(user=user)
-            response = Response({'status': 'success'})
-            print('token en login', token)
-            print('created', created)
-            if not created:
-                response.set_cookie(key='session', value=token.key, secure=True, httponly=True, samesite='lax')
-                print('cookie', response.cookies)
-            return response
-        else:
-            print('serializer.errors', serializer.errors)
-            return Response(serializer.errors, status=status.HTTP_401_UNAUTHORIZED)
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
-class UsuarioView(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = serializers.UsuarioSerializer
+class PeliculaDetailView(generics.RetrieveUpdateDestroyAPIView):
 
-    def get_object(self):
-        session_key = self.request.COOKIES.get('session')
-        print('session_key', session_key)
-        print('self.request.COOKIES', self.request.COOKIES)
-        if not session_key:
-            print('No session token provided')
-            raise Http404("No session token provided")
+    # Vista para ver, actualizar y eliminar peliculas
+    queryset = Pelicula.objects.all()
+    serializer_class = PeliculaSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
+    # Para actualizar la nota de forma dinamica
+    def retrieve(self, request, *args, **kwargs):
+        pelicula = self.get_object()
+        reviews = Review.objects.filter(pelicula=pelicula)
         try:
-            user = Token.objects.get(key=session_key).user
-            print('user', user)
-            return user
-        except Token.DoesNotExist:
-            print('No user found for given session token')
-            raise Http404("No user found for given session token")
+            nota_media = round(reviews.aggregate(nota_media=Avg('calificacion'))['nota_media'], 2)
+        except:
+            nota_media = 5
+        response_data = {
+            'id': pelicula.id,
+            'titulo': pelicula.titulo,
+            'fecha_estreno': pelicula.fecha_estreno,
+            'genero': pelicula.genero,
+            'duracion': pelicula.duracion,
+            'pais': pelicula.pais,
+            'director': pelicula.director,
+            'sinopsis': pelicula.sinopsis,
+            'poster': pelicula.poster,
+            'nota': nota_media
+        }
+        # cambiamos la nota de la pelicula
+        pelicula.nota = nota_media
+        pelicula.save()
+
+        return Response(response_data)
 
 
-# TODO: 26
 @extend_schema(
-    description='Logout endpoint',
-    responses={
-    204: OpenApiResponse(description='Logout successful'),
-    401: OpenApiResponse(description='Invalid session')
-    }
+    parameters=[
+        OpenApiParameter(name='titulo', description='Filtrar por título de película', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='director', description='Filtrar por director', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='genero', description='Filtrar por género', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='sinopsis', description='Filtrar por sinopsis', required=False, type=OpenApiTypes.STR),
+        OpenApiParameter(name='nota', description='Filtrar por nota', required=False, type=OpenApiTypes.FLOAT),
+    ]
 )
-class LogoutView(generics.DestroyAPIView):
-    # TODO: 19
+class PeliculaSearchView(generics.ListAPIView):
 
-    # def delete(self, request):
-    #     response = Response({"status": "success"})
-    #     Token.objects.get(key=request.COOKIES.get('session'))
-    #     response.delete_cookie('session') 
-    #     return response
+    # Vista para buscar peliculas
+    serializer_class = PeliculaSerializer
+
+    def get_queryset(self):
+        queryset = Pelicula.objects.all()
+        # Obtenemos los queryparams
+        titulo = self.request.query_params.get('titulo')
+        director = self.request.query_params.get('director')
+        genero = self.request.query_params.get('genero')
+        sinopsis = self.request.query_params.get('sinopsis')
+        nota = self.request.query_params.get('nota')
+
+        # Hacemos un filtro en función de los queryparams recibidos
+        if titulo:
+            queryset = queryset.filter(titulo__icontains=titulo)
+        if director:
+            queryset = queryset.filter(director__icontains=director)
+        if genero:
+            queryset = queryset.filter(genero__icontains=genero)
+        if sinopsis:
+            queryset = queryset.filter(sinopsis__icontains=sinopsis)
+        if nota:
+            # Permitimos buscar redondeando, es decir con nota 3, nos valen pelis en el rango [3, 4)
+            queryset = queryset.filter(nota__gte=float(nota), nota__lt=float(nota)+1)
+
+        return queryset
+
+
+class ReviewListCreateView(generics.ListCreateAPIView):
     
-    # TODO: 20
-    
-    def delete(self, request):
-        response = Response(status=status.HTTP_204_NO_CONTENT, data={"status": "success"})
-        try:
-            if Token.objects.get(key=request.COOKIES.get('session')):
-                response.delete_cookie('session')
-                return response
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_401_UNAUTHORIZED, data={"error": "Invalid session"})
-"""
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
+
+    # Para el POST
+    def perform_create(self, serializer):
+        serializer.save()
+
+    # Para el GET
+    def get_queryset(self):
+        queryset = Review.objects.all()
+        pelicula_id = self.request.query_params.get('pelicula', None)
+        if pelicula_id is not None:
+            queryset = queryset.filter(pelicula__id=pelicula_id)
+        return queryset

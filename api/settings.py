@@ -62,13 +62,8 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
 
 ]
-"""
-CORS_ALLOW_ALL_ORIGINS = False  # Cambia esto a False
-CORS_ALLOW_CREDENTIALS = True   # Permite el envío de credenciales
-CORS_ALLOWED_ORIGINS = [
-'http://localhost:5173',  # Solo permite peticiones de este origen
-]
-"""
+
+# Esta funciona
 CORS_ALLOW_ALL_ORIGINS = True  # Cambia esto a False
 CORS_ALLOW_CREDENTIALS = True 
 
@@ -148,6 +143,13 @@ WHITENOISE_ROOT = BASE_DIR / "web"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.Usuario'
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'rest_framework.authentication.SessionAuthentication',
+#     ],
+#     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+# }
 
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',

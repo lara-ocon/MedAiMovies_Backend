@@ -1,0 +1,303 @@
+[
+    {
+        "model": "users.pelicula",
+        "pk": 1,
+        "fields": {
+            "titulo": "How to Lose a Guy in 10 Days",
+            "fecha_estreno": "2003-02-07",
+            "genero": "Romance",
+            "duracion": 116,
+            "pais": "Estados Unidos",
+            "director": "Donald Petrie",
+            "sinopsis": "Una periodista de una revista de moda se propone escribir un artículo sobre todas las cosas que hacen que las mujeres pierdan a los hombres después de que su editor le diga que debe escribir un artículo sobre cómo perder a un hombre en 10 días.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/0/07/HowToLoseAGuyimp.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 2,
+        "fields": {
+            "titulo": "La La Land",
+            "fecha_estreno": "2016-12-09",
+            "genero": "Musical",
+            "duracion": 128,
+            "pais": "Estados Unidos",
+            "director": "Damien Chazelle",
+            "sinopsis": "Un pianista de jazz se enamora de una aspirante a actriz en Los Ángeles.",
+            "poster": "https://m.media-amazon.com/images/I/816O+CBx0ML._AC_SL1500_.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 3,
+        "fields": {
+            "titulo": "Marley & Me",
+            "fecha_estreno": "2008-12-25",
+            "genero": "Comedia",
+            "duracion": 115,
+            "pais": "Estados Unidos",
+            "director": "David Frankel",
+            "sinopsis": "Una pareja adopta un cachorro de Labrador que se convierte en un perro muy travieso.",
+            "poster": "https://image.tmdb.org/t/p/original/CD4RJkRcje5NcUZdoQWDY96GjS.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 4,
+        "fields": {
+            "titulo": "Iron Man",
+            "fecha_estreno": "2008-05-02",
+            "genero": "Superhéroes",
+            "duracion": 126,
+            "pais": "Estados Unidos",
+            "director": "Jon Favreau",
+            "sinopsis": "Después de ser secuestrado por un grupo terrorista en Afganistán, el multimillonario y genio inventor Tony Stark construye una armadura mecánica para escapar y decide usar su creación para luchar contra el mal como el superhéroe Iron Man.",
+            "poster": "https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/b/bf/Iron_Man_1_Portada.png/revision/latest?cb=20191029194450&path-prefix=es",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 5,
+        "fields": {
+            "titulo": "Los Vengadores",
+            "fecha_estreno": "2012-05-04",
+            "genero": "Superhéroes",
+            "duracion": 143,
+            "pais": "Estados Unidos",
+            "director": "Joss Whedon",
+            "sinopsis": "Cuando un enemigo inesperado amenaza la seguridad global, Nick Fury, director de la agencia S.H.I.E.L.D., reúne a un grupo de superhéroes para salvar al mundo del desastre.",
+            "poster": "https://th.bing.com/th/id/R.a7e01c71d77e37f5c6b6e78709a75883?rik=Q5LifUH26lF87g&pid=ImgRaw&r=0",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 6,
+        "fields": {
+            "titulo": "Spiderman",
+            "fecha_estreno": "2002-05-03",
+            "genero": "Superhéroes",
+            "duracion": 121,
+            "pais": "Estados Unidos",
+            "director": "Sam Raimi",
+            "sinopsis": "Peter Parker, un estudiante de secundaria, adquiere habilidades sobrehumanas después de ser mordido por una araña genéticamente modificada y decide usar sus poderes para combatir el crimen como Spider-Man.",
+            "poster": "https://th.bing.com/th/id/OIP.8YVxHY_sNaqKXFK-uIOkmgHaLB?rs=1&pid=ImgDetMain",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 7,
+        "fields": {
+            "titulo": "Star Wars",
+            "fecha_estreno": "1977-05-25",
+            "genero": "Ciencia ficción",
+            "duracion": 121,
+            "pais": "Estados Unidos",
+            "director": "George Lucas",
+            "sinopsis": "Luke Skywalker une fuerzas con un caballero Jedi, un piloto arrogante, un wookiee y dos droides para salvar la galaxia del malvado Imperio y rescatar a la princesa Leia.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/8/87/StarWarsMoviePoster1977.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 8,
+        "fields": {
+            "titulo": "El hobbit",
+            "fecha_estreno": "2012-12-14",
+            "genero": "Fantasía",
+            "duracion": 169,
+            "pais": "Estados Unidos",
+            "director": "Peter Jackson",
+            "sinopsis": "Bilbo Bolsón, un hobbit pacífico, es arrastrado a una aventura épica para recuperar el Reino Enano de Erebor del temible dragón Smaug.",
+            "poster": "https://vignette.wikia.nocookie.net/cinemorgue/images/f/f4/Hobbit-unexpected-journey-ring-poster.jpg/revision/latest?cb=20170102144700",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 9,
+        "fields": {
+            "titulo": "ET el extraterrestre",
+            "fecha_estreno": "1982-06-11",
+            "genero": "Ciencia ficción",
+            "duracion": 115,
+            "pais": "Estados Unidos",
+            "director": "Steven Spielberg",
+            "sinopsis": "Un niño llamado Elliott encuentra y hace amistad con un extraterrestre varado en la Tierra, a quien él y sus hermanos llaman E.T., y lo ayudan a regresar a su hogar mientras lo mantienen a salvo de las autoridades.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/6/66/E_t_the_extra_terrestrial_ver3.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 10,
+        "fields": {
+            "titulo": "El rey león",
+            "fecha_estreno": "1994-06-24",
+            "genero": "Animación",
+            "duracion": 88,
+            "pais": "Estados Unidos",
+            "director": "Roger Allers",
+            "sinopsis": "Un joven león llamado Simba huye de su reino después de que su malvado tío Scar lo engañe para que crea que es el responsable de la muerte de su padre, Mufasa, y regresa como adulto para reclamar su lugar como rey.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/3/3d/The_Lion_King_poster.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 11,
+        "fields": {
+            "titulo": "Titanic",
+            "fecha_estreno": "1997-12-19",
+            "genero": "Drama",
+            "duracion": 195,
+            "pais": "Estados Unidos",
+            "director": "James Cameron",
+            "sinopsis": "Un joven artista y una joven de clase alta se enamoran a bordo del Titanic, pero su amor se ve amenazado por un trágico desastre.",
+            "poster": "https://picfiles.alphacoders.com/140/thumb-1920-140026.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 12,
+        "fields": {
+            "titulo": "Harry Potter",
+            "fecha_estreno": "2001-11-16",
+            "genero": "Fantasía",
+            "duracion": 152,
+            "pais": "Reino Unido",
+            "director": "Chris Columbus",
+            "sinopsis": "Un niño huérfano descubre que es un mago y comienza su educación en la Escuela de Magia y Hechicería de Hogwarts.",
+            "poster": "https://image.tmdb.org/t/p/original/skW6AldRx22QNafkvRWbDHF8Ujd.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 13,
+        "fields": {
+            "titulo": "El señor de los anillos",
+            "fecha_estreno": "2001-12-19",
+            "genero": "Fantasía",
+            "duracion": 178,
+            "pais": "Estados Unidos",
+            "director": "Peter Jackson",
+            "sinopsis": "Un joven hobbit llamado Frodo Bolsón es encargado de destruir un anillo mágico que puede dar poder a su portador y que pertenece al malvado Señor Oscuro Sauron.",
+            "poster": "https://th.bing.com/th/id/R.9b8770414c0b89eb3bc28329ed259e4b?rik=EtQR4ZcwvX2twA&pid=ImgRaw&r=0",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 14,
+        "fields": {
+            "titulo": "Cars",
+            "fecha_estreno": "2006-06-09",
+            "genero": "Animación",
+            "duracion": 117,
+            "pais": "Estados Unidos",
+            "director": "Roger Allers",
+            "sinopsis": "Rayo McQueen, un auto de carreras arrogante que termina perdido en un pequeño pueblo llamado Radiator Springs. Allí, aprende lecciones de humildad, amistad y el verdadero significado de ganar mientras se hace amigo de los excéntricos residentes locales. A través de aventuras y desafíos, Rayo descubre que hay más en la vida que solo ganar carreras.",
+            "poster": "https://th.bing.com/th/id/OIP.tu2KrbUiYBR12nBUbx-m9wHaKz?w=768&h=1121&rs=1&pid=ImgDetMain",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 15,
+        "fields": {
+            "titulo": "Toy Story",
+            "fecha_estreno": "1995-11-22",
+            "genero": "Animación",
+            "duracion": 81,
+            "pais": "Estados Unidos",
+            "director": "John Lasseter",
+            "sinopsis": "Un niño llamado Andy juega con sus juguetes, incluido un vaquero llamado Woody, que se ve amenazado por el nuevo juguete de Andy, un astronauta llamado Buzz Lightyear.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/1/13/Toy_Story.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 16,
+        "fields": {
+            "titulo": "El club de la lucha",
+            "fecha_estreno": "1999-10-15",
+            "genero": "Drama",
+            "duracion": 139,
+            "pais": "Estados Unidos",
+            "director": "David Fincher",
+            "sinopsis": "Un hombre descontento con su vida aburrida y sin sentido forma un club de lucha clandestino con un vendedor de jabón carismático.",
+            "poster": "https://upload.wikimedia.org/wikipedia/en/f/fc/Fight_Club_poster.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 17,
+        "fields": {
+            "titulo": "El lobo de Wall Street",
+            "fecha_estreno": "2013-12-25",
+            "genero": "Comedia",
+            "duracion": 180,
+            "pais": "Estados Unidos",
+            "director": "Martin Scorsese",
+            "sinopsis": "Un corredor de bolsa de Nueva York se niega a cooperar en un caso de fraude de valores que involucra corrupción en Wall Street, el mundo corporativo y la mafia.",
+            "poster": "https://th.bing.com/th/id/R.369c31286cb1b3275f9fac54c952b65c?rik=4httoCghqUzi%2fw&riu=http%3a%2f%2f2.bp.blogspot.com%2f-WMuoMtZeXtg%2fUy_lw30dg-I%2fAAAAAAAAN2M%2foijU_Dx4Pfw%2fs1600%2fel%2blobo1.jpg&ehk=CphSZ349ZlkKlWS4%2bM6LhLOGlwQn0Zi4Z1ctpkOfXZc%3d&risl=&pid=ImgRaw&r=0",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 18,
+        "fields": {
+            "titulo": "El padrino",
+            "fecha_estreno": "1972-03-24",
+            "genero": "Drama",
+            "duracion": 175,
+            "pais": "Estados Unidos",
+            "director": "Francis Ford Coppola",
+            "sinopsis": "El patriarca de una poderosa familia de la mafia traslada el control de su imperio clandestino a su hijo más joven.",
+            "poster": "https://th.bing.com/th/id/R.5ba47e2efe7636ffd779cf2b6a61e7b1?rik=ksUtHbhI9fe6mw&riu=http%3a%2f%2fes.web.img3.acsta.net%2fpictures%2f18%2f06%2f12%2f12%2f12%2f0117051.jpg%3fcoixp%3d49%26coiyp%3d27&ehk=aYF0qsgrYB2C3qWbycDlrBTMFZv0LLXmYL2l50FWI9Y%3d&risl=&pid=ImgRaw&r=0",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 19,
+        "fields": {
+            "titulo": "El club de los cinco",
+            "fecha_estreno": "1985-02-15",
+            "genero": "Drama",
+            "duracion": 97,
+            "pais": "Estados Unidos",
+            "director": "John Hughes",
+            "sinopsis": "Cinco estudiantes de secundaria, que representan diferentes estereotipos, se ven obligados a pasar un sábado juntos en detención.",
+            "poster": "https://www.boredpanda.com/blog/wp-content/uploads/2018/10/different-original-names-titles-brands-tv-shows-movies-music-bands-5bb6148241719__700.jpg",
+            "nota": 5
+        }
+    },
+    {
+        "model": "users.pelicula",
+        "pk": 20,
+        "fields": {
+            "titulo": "El resplandor",
+            "fecha_estreno": "1980-06-13",
+            "genero": "Terror",
+            "duracion": 146,
+            "pais": "Estados Unidos",
+            "director": "Stanley Kubrick",
+            "sinopsis": "Un escritor y su familia se mudan a un hotel aislado durante el invierno, donde comienzan a experimentar sucesos paranormales.",
+            "poster": "https://th.bing.com/th/id/R.4784e5e59a8f4dc8893c440e533e8fcd?rik=7Kp030cY2g8XHA&riu=http%3a%2f%2f2.bp.blogspot.com%2f-AWY9PJArpJs%2fUYFv8b6RERI%2fAAAAAAAAEeM%2fiSEsZ30pdI8%2fs1600%2fel_resplandor_31.jpg&ehk=2je8ZLTlETt4ARbWsX%2f7oYSBShgNs40XYUdkyGx1dBo%3d&risl=&pid=ImgRaw&r=0",
+            "nota": 5
+        }
+    }
+]
+

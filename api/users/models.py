@@ -1,8 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class Usuario(AbstractUser):
-    # TODO: 2
 
     nombre = models.CharField(max_length=256)
     tel = models.CharField(max_length=32, null=True, blank=True)
@@ -13,17 +13,33 @@ class Usuario(AbstractUser):
         if not self.username:
             self.username = self.email
         super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.email
 
 
 class Pelicula(models.Model):
     titulo = models.CharField(max_length=255)
     fecha_estreno = models.DateField()
     genero = models.CharField(max_length=50)
-    # otros campos relevantes para una película
+    duracion = models.IntegerField()
+    pais = models.CharField(max_length=50)
+    director = models.CharField(max_length=255)
+    sinopsis = models.TextField()
+    poster = models.URLField()
+    nota = models.FloatField(null=True)
+
+    def __str__(self):
+        return self.titulo
+
 
 class Review(models.Model):
-    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
     pelicula = models.ForeignKey(Pelicula, on_delete=models.CASCADE, related_name='reseñas')
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='reseñas')
+    usuario_email = models.EmailField()
     calificacion = models.IntegerField()
     comentario = models.TextField(blank=True, null=True)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.usuario} - {self.pelicula}'
